@@ -1,7 +1,7 @@
 #!/usr/bin/env nujel
 
 [require :ansi]
-[pfmtln "Welcome to the {} SSG - {*module*} - {+root-working-dir+}" [ansi/rainbow "Nujel"]]
+[pfmtln "Welcome to the {} SSG" [ansi/rainbow "Nujel"]]
 
 [require :ssg/context]
 [require :ssg/content]
