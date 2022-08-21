@@ -1,0 +1,11 @@
+[import [add-loader] :ssg/loader]
+[import [get-out-path] :ssg/deployment]
+
+[export do
+        [defn ssg/loader/copy/do [ctx path]
+          "Loader that just copies the file over"
+          [def dest-path [get-out-path ctx path]]
+          [spit dest-path [slurp path]]
+          dest-path]]
+
+[add-loader :otherwise ssg/loader/copy/do]

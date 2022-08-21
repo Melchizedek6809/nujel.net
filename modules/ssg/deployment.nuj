@@ -1,3 +1,9 @@
+[export get-out-path
+        [defn ssg/deployment/get-out-path [ctx path]
+          [println path]
+          [cat [tree/ref ctx :deploy-dir]
+               [string/cut path [length [tree/ref ctx :content-root-dir]]]]]]
+
 [export do
         [defn ssg/deployment/do [ctx]
           "Deploy everything for CTX"

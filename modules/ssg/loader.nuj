@@ -1,0 +1,25 @@
+[def loaders @[]]
+
+[export add-loader
+        [defn ssg/loader/add-loader [extension handler]
+          [tree/set! loaders extension handler]]]
+
+[defn ssg/loader/init [ctx]
+  [require :ssg/loader/copy]
+  ctx]
+
+[export add-default
+        [defn ssg/loader/add-default [ctx]
+          "Add the default loaders to the CTX"
+          [ssg/loader/init ctx]
+          [def ctx-loaders [tree/ref ctx :loaders]]
+          [doseq [ext [tree/keys loaders] ctx]
+                 [tree/set! ctx-loaders ext [tree/ref loaders ext]]]]]
+
+[export build
+        [defn ssg/loader/build [ctx path]
+          "Build a certain path using the loader"
+          [def ctx-loaders [tree/ref ctx :loaders]]
+          [def ext [string->keyword [lowercase [path/extension path]]]]
+          [[or [tree/ref ctx-loaders ext]
+               [tree/ref ctx-loaders :otherwise]] ctx path]]]

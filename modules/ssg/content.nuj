@@ -1,8 +1,8 @@
-[require :ssg/loaders]
+[require :ssg/loader]
 
 [export build
         [defn ssg/content/build [ctx]
           "Build everything"
           [def files [directory/read-recursive [tree/ref ctx :content-root-dir]]]
-          [for-each files [fn [path] [ssg/loaders/build ctx path]]]
+          [for-each files [fn [path] [ssg/loader/build ctx path]]]
           ctx]]

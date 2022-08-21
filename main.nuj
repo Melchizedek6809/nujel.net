@@ -3,13 +3,13 @@
 [require :ansi]
 [require :ssg/context]
 [require :ssg/content]
-[require :ssg/loaders]
+[require :ssg/loader]
 [require :ssg/deployment]
 
 
 [pfmtln "Welcome to the {} SSG - {*module*}" [ansi/rainbow "Nujel"]]
 
 [-> [ssg/context/get "./"]
-    ssg/loaders/add-default
+    ssg/loader/add-default
     ssg/content/build
     ssg/deployment/do]
