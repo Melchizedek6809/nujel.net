@@ -1,0 +1,32 @@
+[export apply
+        [defn ssg/theme/apply [ctx path]
+          "Apply a theme to a particular file in PATH"
+          [def theme [tree/ref ctx :theme]]
+          [import [apply :as theme/apply] theme]
+          [theme/apply ctx path]]]
+
+[defn theme/split/rec [theme-text start ret]
+      ""
+      [def i [index-of theme-text "{{" start]]
+      [if [< i 0]
+          [if [not= start 0]
+              [cons [string/cut theme-text start] ret]
+              [cons theme-text ret]]
+          [do [def end-i [index-of theme-text "}}" i]]
+              [when [< end-i 0] [exception "Unpaired Brackets in theme" theme-text]]
+              [cons! [string/cut theme-text start i] ret]
+              [cons! [cons 'do [read [string/cut theme-text [+ i 2] end-i]]] ret]
+              [theme/split/rec theme-text [+ end-i 2] ret]]]]
+
+[defn theme/split [theme-text]
+      "Split a theme into separate strings and expressions for every {{ }} block."
+      [nreverse [theme/split/rec theme-text 0 #nil]]]
+
+[export parse
+        [defn ssg/theme/parse [raw-theme-text]
+          "Parse a theme and return a function that can be called with a ctx and path to apply that theme to some content"
+          [def theme-parts [cons 'cat [theme/split raw-theme-text]]]
+          [def theme-form `[fn [ctx path]
+                               [def content [slurp path]]
+                               ~theme-parts]]
+          [eval theme-form]]]

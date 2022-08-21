@@ -6,6 +6,7 @@
 
 [defn ssg/loader/init [ctx]
   [require :ssg/loader/copy]
+  [require :ssg/loader/html-content]
   ctx]
 
 [export add-default

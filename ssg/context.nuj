@@ -5,7 +5,7 @@
           @[ :path path
              :title "Nujel.net"
              :author "Ben"
-             :loaders @[]
              :content-root-dir "content"
              :deploy-dir "deploy"
-                   ]]]
+             :theme :ssg/theme/default
+             :loaders @[]]]]
