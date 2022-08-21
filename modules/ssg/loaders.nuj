@@ -1,0 +1,18 @@
+[defn deployment-path [ctx source-path]
+  [cat [tree/ref ctx :deploy-dir]
+       [string/cut source-path [length [tree/ref ctx :content-root-dir]]]]]
+
+[defn loader-copy [ctx path]
+  "Loader that just copies the file over"
+  [def dest-path [deployment-path ctx path]]
+  [spit dest-path [slurp path]]
+  dest-path]
+
+[export add-default
+        [defn ssg/loaders/add-default [ctx]
+          "Add the default loaders to the CTX"
+          [tree/set! ctx :otherwise loader-copy]]]
+
+[export build [defn ssg/loaders/build [ctx path]
+        "Build a certain path using the loader"
+        [loader-copy ctx path]]]

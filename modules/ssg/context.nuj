@@ -1,0 +1,11 @@
+[export get
+        [defn ssg/context/get [path]
+          "Return the context for a SSG project, located at PATH"
+
+          @[ :path path
+             :title "Nujel.net"
+             :author "Ben"
+             :loaders @[]
+             :content-root-dir "content"
+             :deploy-dir "deploy"
+                   ]]]

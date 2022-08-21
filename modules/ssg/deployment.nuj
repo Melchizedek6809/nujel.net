@@ -1,0 +1,10 @@
+[export do
+        [defn ssg/deployment/do [ctx]
+          "Deploy everything for CTX"
+
+          [def deploy-dir [tree/ref ctx :deploy-dir]]
+          [when-not [file/dir? deploy-dir]
+                    [mkdir deploy-dir]]
+
+          [pfmtln "Deploying: {ctx}"]
+          ctx]]
