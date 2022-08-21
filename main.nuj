@@ -1,4 +1,7 @@
 #!/usr/bin/env nujel
+;;; The main entrypoint to the Nujel SSG
+;;;
+;;; Most functionality is separated into modules that can be found under /ssg/
 
 [require :ansi]
 [pfmtln "Welcome to the {} SSG" [ansi/rainbow "Nujel"]]
@@ -8,8 +11,13 @@
 [require :ssg/loader]
 [require :ssg/deployment]
 
-[-> [ssg/context/get "./"]
-    ssg/loader/add-default
-    ssg/content/build
-    ssg/content/add-resources
-    ssg/deployment/do]
+[defn main [args]
+      :export
+
+      [-> [ssg/context/get "./"]
+          ssg/loader/add-default
+          ssg/content/build
+          ssg/content/add-resources
+          ssg/deployment/deploy]]
+
+[main #nil]

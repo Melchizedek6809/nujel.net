@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+cd ../
+
+scc --count-as "nuj:Scheme" --exclude-dir="deploy,content" -i nuj,html,js,css

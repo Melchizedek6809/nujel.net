@@ -1,24 +1,22 @@
 [require :ssg/loader]
 
-[export get-out-path
-        [defn ssg/content/get-out-path [ctx path]
-          [println path]
-          [cat [tree/ref ctx :deploy-dir]
-               [string/cut path [length [tree/ref ctx :content-root-dir]]]]]]
+[defn get-out-path [ctx path]
+      :export
+      [cat [tree/ref ctx :deploy-dir]
+           [string/cut path [length [tree/ref ctx :content-root-dir]]]]]
 
-[export add-resources
-        [defn ssg/content/add-resources [ctx]
-          "Copy all resources used over"
-          [def deploy-dir [tree/ref ctx :deploy-dir]]
-          [doseq [res [tree/values [tree/ref ctx :resources-needed]] ctx]
-                 [mkdir [fmt "{deploy-dir}/{}" [path/dirname [cdr res]]]]
-                 [file/copy [car res] [fmt "{deploy-dir}/{}" [cdr res]]]
-                 [println res]]]]
+[defn add-resources [ctx]
+      :export
+      "Copy all resources used over"
+      [def deploy-dir [tree/ref ctx :deploy-dir]]
+      [doseq [res [tree/values [tree/ref ctx :resources-needed]] ctx]
+             [mkdir [fmt "{deploy-dir}/{}" [path/dirname [cdr res]]]]
+             [file/copy [car res] [fmt "{deploy-dir}/{}" [cdr res]]]]]
 
-[export build
-        [defn ssg/content/build [ctx]
-          "Build everything"
-          [mkdir [tree/ref ctx :deploy-dir]]
-          [def files [directory/read-recursive [tree/ref ctx :content-root-dir]]]
-          [doseq [path files ctx]
-                 [ssg/loader/build ctx path]]]]
+[defn build [ctx]
+      "Build everything"
+      :export
+      [mkdir [tree/ref ctx :deploy-dir]]
+      [def files [directory/read-recursive [tree/ref ctx :content-root-dir]]]
+      [doseq [path files ctx]
+             [ssg/loader/build ctx path]]]

@@ -1,6 +1,5 @@
-[export do
-        [defn ssg/deployment/do [ctx]
-          "Deploy everything for CTX"
-
-          [pfmtln "Deploying: {ctx}"]
-          ctx]]
+[defn deploy [ctx]
+      "Deploy everything for CTX"
+      :export
+      [pfmtln "Deploying: {ctx}"]
+      [return ctx]]

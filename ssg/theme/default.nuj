@@ -3,7 +3,7 @@
 [def +theme-path+ [fmt "{+root-working-dir+}/ssg/theme/default"]]
 [def base-template [theme/parse +theme-path+ [slurp [fmt "{+theme-path+}/base.html"]]]]
 
-[export apply
-        [defn ssg/theme/default/apply [ctx path]
-          "Apply the default theme to a particular path"
-          [base-template ctx path]]]
+[defn render [ctx path]
+      "Apply the default theme to a particular path"
+      :export
+      [base-template ctx path]]

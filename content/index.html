@@ -1,8 +1,12 @@
-{{[page-meta!
 
-:title #nil
-:date "2022-08-21"
++++
+title: #nil
+date: "2022-08-21"
++++
 
-]}}
 <h1>Welcome</h1>
 <p>Not much to read yet</p>
+<h3>Frontmatter based page-meta:</h3>
+<pre>
+  {{ [fmt "{*page-meta*:?}"] }}
+</pre>
