@@ -8,9 +8,8 @@
 [require :ssg/loader]
 [require :ssg/deployment]
 
-
-
 [-> [ssg/context/get "./"]
     ssg/loader/add-default
     ssg/content/build
+    ssg/content/add-resources
     ssg/deployment/do]

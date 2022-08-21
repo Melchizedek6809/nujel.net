@@ -1,3 +1,7 @@
+[defn include-resource* [ctx path dest-path]
+  [tree/set! [tree/ref ctx :resources-needed] [string->keyword path] [cons path dest-path]]
+  dest-path]
+
 [export apply
         [defn ssg/theme/apply [ctx path]
           "Apply a theme to a particular file in PATH"
@@ -23,10 +27,12 @@
       [nreverse [theme/split/rec theme-text 0 #nil]]]
 
 [export parse
-        [defn ssg/theme/parse [raw-theme-text]
+        [defn ssg/theme/parse [+theme-path+ raw-theme-text]
           "Parse a theme and return a function that can be called with a ctx and path to apply that theme to some content"
           [def theme-parts [cons 'cat [theme/split raw-theme-text]]]
           [def theme-form `[fn [ctx path]
                                [def content [slurp path]]
+                               [defn include-resource [res-path]
+                                 [include-resource* ctx [fmt "{+theme-path+}/{res-path}"] res-path]]
                                ~theme-parts]]
           [eval theme-form]]]

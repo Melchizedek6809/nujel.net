@@ -1,5 +1,5 @@
 [import [add-loader] :ssg/loader]
-[import [get-out-path] :ssg/deployment]
+[import [get-out-path] :ssg/content]
 [import [apply :as theme/apply] :ssg/theme]
 
 [export do

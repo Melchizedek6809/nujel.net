@@ -8,4 +8,5 @@
              :content-root-dir "content"
              :deploy-dir "deploy"
              :theme :ssg/theme/default
+             :resources-needed @[]
              :loaders @[]]]]

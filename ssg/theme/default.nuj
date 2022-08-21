@@ -1,8 +1,7 @@
-[def +module-path+ [fmt "{+root-working-dir+}/ssg/theme/default"]]
-
 [import [parse :as theme/parse] :ssg/theme]
 
-[def base-template [theme/parse [slurp [fmt "{+module-path+}/base.html"]]]]
+[def +theme-path+ [fmt "{+root-working-dir+}/ssg/theme/default"]]
+[def base-template [theme/parse +theme-path+ [slurp [fmt "{+theme-path+}/base.html"]]]]
 
 [export apply
         [defn ssg/theme/default/apply [ctx path]
