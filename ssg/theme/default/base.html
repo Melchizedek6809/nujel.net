@@ -9,7 +9,7 @@
   <body>
     <header>
       <nav>
-        <a href="/">Home</a>
+        {{ [join [map [navigation] [fn [v] [render-link v]]] " | "] }}
       </nav>
     </header>
     <main>
@@ -17,7 +17,7 @@
     </main>
     <footer>
       <div>
-        by Ben
+        by {{ [or [ref ctx :author] "Anonymous"] }}
       </div>
     </footer>
   </body>

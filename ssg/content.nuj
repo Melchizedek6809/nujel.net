@@ -1,4 +1,5 @@
 [require :ssg/loader]
+[import [parse-frontmatter frontmatter] :ssg/theme]
 
 [defn get-out-path [ctx path]
       :export
@@ -13,10 +14,25 @@
              [mkdir [fmt "{deploy-dir}/{}" [path/dirname [cdr res]]]]
              [file/copy [car res] [fmt "{deploy-dir}/{}" [cdr res]]]]]
 
+[defn path/content? [path]
+      [= [lowercase [path/extension path]] "html"]]
+
+[defn load-frontmatter [path name content-frontmatter]
+      [when-not [path/content? path] [return #nil]]
+      [def fm [parse-frontmatter [frontmatter [slurp path]]]]
+      [tree/set! fm :href name]
+      [tree/set! content-frontmatter [string->keyword name] fm]]
+
 [defn build [ctx]
       "Build everything"
       :export
       [mkdir [tree/ref ctx :deploy-dir]]
       [def files [directory/read-recursive [tree/ref ctx :content-root-dir]]]
+      [def content-frontmatter @[]]
+      [tree/set! ctx :frontmatter
+                 [doseq [path files content-frontmatter]
+                        [load-frontmatter path
+                                          [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
+                                          content-frontmatter]]]
       [doseq [path files ctx]
              [ssg/loader/build ctx path]]]

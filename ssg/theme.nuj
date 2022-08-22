@@ -1,3 +1,5 @@
+[import [build :as navigation/build] :ssg/navigation]
+
 [defn include-resource* [ctx path dest-path]
   [tree/set! [tree/ref ctx :resources-needed] [string->keyword path] [cons path dest-path]]
   dest-path]
@@ -59,6 +61,12 @@
       [def expr [read fm]]
       [apply tree/new expr]]
 
+[defn render-link* [ctx path target]
+  [fmt "<a href=\"{}\">{}</a>"
+       [ref target :href]
+       [or [ref target :nav-title]
+           [ref target :title]]]]
+
 [defn parse [+theme-path+ raw-theme-text]
       :export
       "Parse a theme and return a function that can be called with a ctx and path to apply that theme to some content"
@@ -68,6 +76,10 @@
                            [def *page-meta* [parse-frontmatter [car parts]]]
                            [def content [parse-content ctx path [cdr parts] *page-meta*]]
 
+                           [defn render-link [target]
+                             [render-link* ctx path target]]
+                           [defn navigation []
+                             [navigation/build ctx]]
                            [defn include-resource [res-path]
                              [include-resource* ctx [fmt "{+theme-path+}/{res-path}"] res-path]]
                            [defn page-title []

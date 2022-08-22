@@ -1,0 +1,5 @@
+[defn build [ctx]
+  "Build up a navigation and return a list of trees, describing the entries"
+  :export
+  [list/sort [tree/values [tree/ref ctx :frontmatter]] [fn [a b] [< [tree/ref a :href]
+                                                                    [tree/ref a :href]]]]]
