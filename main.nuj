@@ -4,8 +4,6 @@
 ;;; Most functionality is separated into modules that can be found under /ssg/
 
 [require :ansi]
-[pfmtln "Welcome to the {} SSG" [ansi/rainbow "Nujel"]]
-
 [require :ssg/context]
 [require :ssg/content]
 [require :ssg/loader]
@@ -13,11 +11,10 @@
 
 [defn main [args]
       :export
+      [pfmtln "Welcome to the {} SSG" [ansi/rainbow "Nujel"]]
 
       [-> [ssg/context/get "./"]
           ssg/loader/add-default
           ssg/content/build
           ssg/content/add-resources
           ssg/deployment/deploy]]
-
-[main #nil]
