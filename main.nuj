@@ -3,15 +3,15 @@
 ;;;
 ;;; Most functionality is separated into modules that can be found under /ssg/
 
-[require :ansi]
-[require :ssg/context]
-[require :ssg/content]
-[require :ssg/loader]
-[require :ssg/deployment]
+[import [rainbow] :ansi]
+[require "ssg/context"]
+[require "ssg/content"]
+[require "ssg/loader"]
+[require "ssg/deployment"]
 
 [defn main [args]
       :export
-      [pfmtln "Welcome to the {} SSG" [ansi/rainbow "Nujel"]]
+      [pfmtln "Welcome to the {} SSG" [rainbow "Nujel"]]
 
       [-> [ssg/context/get "./"]
           ssg/loader/add-default

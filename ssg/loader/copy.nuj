@@ -1,5 +1,5 @@
-[import [add-loader] :ssg/loader]
-[import [get-out-path] :ssg/content]
+[import [add-loader] "../loader"]
+[import [get-out-path] "../content"]
 
 [defn build [ctx path]
       "Loader that just copies the file over"

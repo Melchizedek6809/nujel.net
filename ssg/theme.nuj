@@ -1,4 +1,4 @@
-[import [build :as navigation/build] :ssg/navigation]
+[import [build :as navigation/build] "navigation"]
 
 [defn include-resource* [ctx path dest-path]
   [tree/set! [tree/ref ctx :resources-needed] [string->keyword path] [cons path dest-path]]

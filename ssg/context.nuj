@@ -6,6 +6,6 @@
          :author "Ben"
          :content-root-dir "content"
          :deploy-dir "deploy"
-         :theme :ssg/theme/default
+         :theme "theme/default"
          :resources-needed @[]
          :loaders @[]]]

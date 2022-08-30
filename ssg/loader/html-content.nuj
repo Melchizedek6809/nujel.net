@@ -1,6 +1,6 @@
-[import [add-loader] :ssg/loader]
-[import [get-out-path] :ssg/content]
-[import [render] :ssg/theme]
+[import [add-loader] "../loader"]
+[import [get-out-path] "../content"]
+[import [render] "../theme"]
 
 [defn build [ctx path]
       "Loader that just copies the file over"

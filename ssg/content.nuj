@@ -1,5 +1,5 @@
-[require :ssg/loader]
-[import [parse-frontmatter frontmatter] :ssg/theme]
+[import [build :as loader/build] "loader"]
+[import [parse-frontmatter frontmatter] "theme"]
 
 [defn get-out-path [ctx path]
       :export
@@ -35,4 +35,4 @@
                                           [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
                                           content-frontmatter]]]
       [doseq [path files ctx]
-             [ssg/loader/build ctx path]]]
+             [loader/build ctx path]]]

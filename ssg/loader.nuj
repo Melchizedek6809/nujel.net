@@ -6,9 +6,9 @@
       [tree/set! loaders extension handler]]
 
 [defn init [ctx]
-  [require :ssg/loader/copy]
-  [require :ssg/loader/html-content]
-  [return ctx]]
+      [require "loader/copy"]
+      [require "loader/html-content"]
+      [return ctx]]
 
 [defn add-default [ctx]
       "Add the default loaders to the CTX"
