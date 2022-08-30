@@ -34,6 +34,7 @@
 [defn build [ctx]
       "Build everything"
       :export
+      [println ctx]
       [mkdir [tree/ref ctx :deploy-dir]]
       [def content-frontmatter @[]]
       [build-content ctx

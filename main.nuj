@@ -8,6 +8,7 @@
 [require "ssg/content"]
 [require "ssg/loader"]
 [require "ssg/deployment"]
+[import [load-builtin-themes] "ssg/theme"]
 
 [defn main [args]
       :export
@@ -17,6 +18,7 @@
 
       [-> [ssg/context/get "./"]
           ssg/loader/add-default
+          load-builtin-themes
           ssg/content/build
           ssg/content/add-resources
           ssg/deployment/deploy]]

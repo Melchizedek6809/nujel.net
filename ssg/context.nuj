@@ -6,6 +6,6 @@
          :author "Anonymous"
          :content-root-dir "content"
          :deploy-dir "deploy"
-         :theme "theme/default"
+         :theme :default
          :resources-needed @[]
          :loaders @[]]]
