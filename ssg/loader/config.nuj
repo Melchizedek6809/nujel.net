@@ -4,8 +4,6 @@
 
 [defn build [ctx path]
       "Loader that just copies the file over"
-      [def dest-path [get-out-path ctx path]]
-      [spit dest-path [render ctx path]]
-      [return dest-path]]
+      [return #nil]]
 
-[add-loader :otherwise build]
+[add-loader :nuj build]

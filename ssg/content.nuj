@@ -23,16 +23,29 @@
       [tree/set! fm :href name]
       [tree/set! content-frontmatter [string->keyword name] fm]]
 
+[defn build-content [ctx path content-frontmatter build-fun]
+      [when [file/file? [cat path "/config.nuj"]]
+        [set! ctx [tree/merge ctx [file/eval [cat path "/config.nuj"]]]]]
+      [doseq [c [directory/read-relative path] content-frontmatter]
+             [if [file/dir? c]
+                 [build-content ctx c content-frontmatter build-fun]
+                 [build-fun ctx c content-frontmatter]]]]
+
 [defn build [ctx]
       "Build everything"
       :export
       [mkdir [tree/ref ctx :deploy-dir]]
-      [def files [directory/read-recursive [tree/ref ctx :content-root-dir]]]
       [def content-frontmatter @[]]
-      [tree/set! ctx :frontmatter
-                 [doseq [path files content-frontmatter]
-                        [load-frontmatter path
-                                          [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
-                                          content-frontmatter]]]
-      [doseq [path files ctx]
-             [loader/build ctx path]]]
+      [build-content ctx
+                     [tree/ref ctx :content-root-dir]
+                     content-frontmatter
+                     [fn [ctx path content-frontmatter]
+                         [load-frontmatter path
+                                           [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
+                                           content-frontmatter]]]
+      [tree/set! ctx :frontmatter content-frontmatter]
+      [build-content ctx
+                     [tree/ref ctx :content-root-dir]
+                     content-frontmatter
+                     loader/build]
+      ctx]

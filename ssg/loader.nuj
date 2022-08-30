@@ -7,6 +7,7 @@
 
 [defn init [ctx]
       [require "loader/copy"]
+      [require "loader/config"]
       [require "loader/html-content"]
       [return ctx]]
 

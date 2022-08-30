@@ -12,6 +12,8 @@
 [defn main [args]
       :export
       [pfmtln "Welcome to the {} SSG" [rainbow "Nujel"]]
+      [when [and [car args] [string? [car args]]] [cd [car args]]]
+      [println [cwd]]
 
       [-> [ssg/context/get "./"]
           ssg/loader/add-default

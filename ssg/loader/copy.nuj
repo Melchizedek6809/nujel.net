@@ -1,9 +1,8 @@
 [import [add-loader] "../loader"]
-[import [get-out-path] "../content"]
+[import [get-out-path] "../content"]\
 
 [defn build [ctx path]
       "Loader that just copies the file over"
-      :export
       [def dest-path [get-out-path ctx path]]
       [file/copy path dest-path]
       dest-path]

@@ -2,8 +2,8 @@
       "Return the context for a SSG project, located at PATH"
       :export
       @[ :path path
-         :title "Nujel.net"
-         :author "Ben"
+         :title "Some site"
+         :author "Anonymous"
          :content-root-dir "content"
          :deploy-dir "deploy"
          :theme "theme/default"
