@@ -1,0 +1,23 @@
++++
+title: "1.7 - Quote / Quasiquote"
+date: "2022-08-31"
++++
+
+<h1>Quote / Quasiquote</h1>
+<p>Quote works as you would expect, quasiquote however uses the clojure syntax for <code>unquote</code>/<code>unquote-splicing</code>. This is because I want to be able to treat <code>,</code> as white-space (it also looks very similar to a period, which I dislike).</p>
+<pre>
+'a ; You can quote symbols
+; => a
+
+'[1 2 3] ; Or lists
+; => [1 2 3]
+
+'(1 2 3) ; With parentheses or brackets
+; => [1 2 3]
+
+`[1 2 ~[+ 1 1 1]] ; To unquote you can use a tilde
+; => [1 2 3]
+
+`[1 ~@[list 2 3]] ; And ~@ for unquote-splicing
+; => [1 2 3]
+</pre>

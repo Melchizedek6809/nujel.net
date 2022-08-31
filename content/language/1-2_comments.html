@@ -1,0 +1,26 @@
++++
+title: "1.2 - Comments"
+date: "2022-08-31"
++++
+
+<h1>Comments</h1>
+<p>Comments use Scheme syntax, and some SRFI's have been implemented directly.</p>
+<pre>
+; A single semicolon comments out everything until the next line
+(+ 1 #;2 3) ; You can use #; to comment out the following form, should be SRFI-62 compatible!
+; => 4
+#|
+ | Nujel also allows for SRFI-30 like nested Multi-line comments
+ |#
+[comment [println "A message, never to be printed."]] ; Nujel also has a comment macro, this however returns #nil unlike #;
+</pre>
+
+<p>Apart from that it is recommended to use a single <code>;</code> at the end of a line to comment whatever is happening on that particular line.</p>
+
+<p>If however you would like to comment a bigger section of code you should put 2 <code>;;</code> at the beginning of the line.</p>
+
+<p>For top-level comments describing the entire file try and use 3 <code>;;;</code> at the beginning of the lines.</p>
+
+<p>The comment macro is mostly useful for usage with <code>nujel-mode</code> since you can easily evaluate commented out forms. Beware however that everything within a comment macro needs to be a valid Nujel S-Expression!</p>
+
+<p>This is in accordance with <i>Scheme</i>, <i>Common Lisp</i> as well as <i>Clojure</i> best practices.</p>

@@ -1,0 +1,33 @@
++++
+
+title: "1.4 - Arithmetic"
+date: "2022-08-31"
+
++++
+
+<h1>Arithmetic operations</h1>
+
+<p>Nujel supports most widely used operators directly and tries to use the same names as <i>Clojure</i> does.</p>
+
+<pre>
+[+ 1 2 3 4] ; You can add as many numbers as you want
+; => 10
+[+ 1 2 [+ 3 4]]
+; => 10
+[+ [+ 1 2] [+ 3 4]]
+; => 10
+[+ 1 -2] ; You can also use negative numbers in additions
+; => -1
+[+ 1 [- 2]] ; - can also be used to negate numbers
+; => -1
+[+ 1 [- [+ 1 1]]] ; Results of a calculation can also be negated
+; => -1
+[+ 1 :two "drei"] ; You can only calculate with numbers
+; => :type-error
+[def my-var 123]
+[* 2 my-var] ; Using variables is fine as long as they are of a numeric type
+; => 246
+[def my-string "tausend"]
+[* 2 my-string]
+; => :type-error
+</pre>

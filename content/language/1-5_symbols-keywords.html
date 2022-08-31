@@ -1,0 +1,24 @@
++++
+title: "1.5 - Symbols / Keywords"
+date: "2022-08-31"
++++
+
+<h1>Symbols / Keywords</h1>
+
+<p>Keywords have to start, or end, with a single <code>:</code> character and are self-evaluating. They are a distinct type from symbols but can be easily converted.</p>
+
+<p>Regarding their usage, keywords should be used when the keyword itself is the value to be used, symbols should be used to give a label to another value.</p>
+
+<pre>
+:asd ; A keyword
+; => :asd
+
+asd: ; Another keyword
+; => asd:
+
+[= asd: :asd] ; It doesn't matter where we put the colon
+; => #t
+
+[= :asd [symbol->keyword 'asd]]
+; => #t
+</pre>
