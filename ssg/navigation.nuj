@@ -1,7 +1,33 @@
+[defn build-prev-next-list [ctx]
+      "Build the list linking each page to the next/previous one, which might"
+      "not be displayed on every page but will be calculated nonetheless"
+      :export
+      [def nav @[]]
+      [def l [-> [tree/values [tree/ref ctx :frontmatter]]
+                 [list/sort [fn [a b] [< [tree/ref a :href]
+                                         [tree/ref b :href]]]]]]
+      [def c l]
+      [while [cdr c]
+        [when [== [path/dirname [tree/ref [car c] :href]]
+                  [path/dirname [tree/ref [cadr c] :href]]]
+          [def cur-href [string->keyword [tree/ref [cadr c] :href]]]
+          [def prev-href [tree/ref [car c] :href]]
+          [when-not [tree/ref nav cur-href] [tree/set! nav cur-href @[:prev #nil :next #nil]]]
+          [tree/set! [tree/ref nav cur-href] :prev prev-href]
+
+          [def cur-href [string->keyword [tree/ref [car c] :href]]]
+          [def next-href [tree/ref [cadr c] :href]]
+          [when-not [tree/ref nav cur-href] [tree/set! nav cur-href @[:prev #nil :next #nil]]]
+          [tree/set! [tree/ref nav cur-href] :next next-href]]
+        [cdr! c]]
+
+      [pfmtln "\n\n{:?}\n\n" nav]
+      [tree/set! ctx :prev-next-nav nav]]
+
 [defn build [ctx depth]
   "Build up a navigation and return a list of trees, describing the entries"
   :export
   [-> [tree/values [tree/ref ctx :frontmatter]]
       [filter [fn [a] [== depth [tree/ref a :depth]]]]
       [list/sort [fn [a b] [< [tree/ref a :href]
-                              [tree/ref a :href]]]]]]
+                              [tree/ref b :href]]]]]]

@@ -3,11 +3,6 @@ title: "1.9 - Modules"
 date: "2022-08-31"
 +++
 
-<box-wrap box-color="red">
-    <h3>Warning</h3>
-    <p>This subsystem is still considered unstable and may change <b>drastically</b>, so be careful when depending on specific behaviour.</p>
-</box-wrap>
-
 <h1>Modules</h1>
 <p>To help with organizing bigger projects Nujel includes a module system, this allows programmers to reuse short and simple names and also constrains interactions into a (hopefully) manageable area.</p>
 <p>There are currently 2 main sources for modules:</p>
@@ -17,7 +12,12 @@ date: "2022-08-31"
 </ul>
 <p>They mainly differ by using different types to specify their names, either keywords for built-ins or strings for external modules.</p>
 
-<h3>Importing from built-in modules</h3>
+<box-wrap box-color="red">
+    <h3>Warning</h3>
+    <p>This subsystem is still considered unstable and may change <b>drastically</b>, so be careful when depending on specific behaviour.</p>
+</box-wrap>
+
+<h3>1. Importing from built-in modules</h3>
 <p>Let's start with some simple example on how to import a function from a builtin stdlib module:</p>
 <pre class="source source-nujel">
 [import [red] :ansi]
@@ -33,7 +33,7 @@ date: "2022-08-31"
     <p>The names of the builtin modules will very likely change, they will most likely get a single prefix so <code>:ansi</code> becomes <code>:core/ansi</code></p>
 </box-wrap>
 
-<h3>Writing your own modules</h3>
+<h3>2. Writing your own modules</h3>
 <p>You don't need to do anything special, every Nujel source file can be treated as a module. When it is imported for the first time all top-level code will be executed and all values marked for :export will be added to a map. The name is also determined by the path in the filesystem.</p>
 <pre class="source source-nujel">
 ; test.nuj
@@ -48,7 +48,7 @@ date: "2022-08-31"
 [export exported-value internal-value] ; Exporting arbitrary values is best done with the [export] macro, it has pretty much the same form as [def]
 </pre>
 
-<h3>Importing external modules</h3>
+<h3>3. Importing your own modules</h3>
 <p>To import modules from the filesystem, mainly ones you wrote yourself, you need to specify a relative path to the file, without the .nuj ending.</p>
 <pre class="source source-nujel">
 ; test.nuj
@@ -61,12 +61,12 @@ date: "2022-08-31"
 [test] ; => "Test has been called!"
 </pre>
 
-<h3>Executing modules</h3>
+<h3>4. Executing modules</h3>
 <p>One uncommon feature of the Nujel module system might be that there is no big distinction between executables and libraries, executable modules just have to export a [main] function which then might be called with the commandline arguments.</p>
 <p>This enables the runtime to bundle multiple executable modules within the main executable, for example right now the REPL, Help screen and C Asset Code generator are all executable modules contained in the default stdlib.</p>
 <p>Nujel defaults to executing the REPL module, but you can change that by for example specifying <code>nujel -m :games/guess</code> which should start a very simple guess the number game.</p>
 
 <box-wrap box-color="green">
     <h3>Reasoning</h3>
-    <p>I got inspired by Oberon here, and so far it has already become quite convenient to be able to bundle multiple "executables" with Nujel.  It should become even more interesting once adding custom modules into a Nujel binary becomes easier and we enable for the default module to be changed easily. Then we could build specialized Nujel runtimes for specific programs with the end user not needing to know that it was built with Nujel.
+    <p>I got inspired by <a href="https://en.wikipedia.org/wiki/Oberon_(programming_language)">Oberon</a> here, and so far it has already become quite convenient to be able to bundle multiple "executables" with Nujel.  It should become even more interesting once adding custom modules into a Nujel binary becomes easier and we enable for the default module to be changed easily. Then we could build specialized Nujel runtimes for specific programs with the end user not needing to know that it was built with Nujel.</p>
 </box-wrap>

@@ -14,6 +14,13 @@
     </header>
     <main>
       {{ content }}
+      <nav class="chapter-nav">
+      {{
+        [when [and [not [tree/ref *page-meta* :hide-prev-next]] [or this-prev this-next]]
+              [cat [fmt "<div class=\"prev-chapter\">{}</div>" [render-link this-prev]]
+                   [fmt "<div class=\"next-chapter\">{}</div>" [render-link this-next]]]]
+      }}
+      </nav>
     </main>
     <footer>
       <div>

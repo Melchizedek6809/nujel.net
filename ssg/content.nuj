@@ -1,5 +1,6 @@
 [import [build :as loader/build] "loader"]
 [import [parse-frontmatter frontmatter] "theme"]
+[import [build-prev-next-list] "navigation"]
 
 [defn get-out-path [ctx path]
       :export
@@ -45,7 +46,7 @@
                                            [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
                                            content-frontmatter]]]
       [tree/set! ctx :frontmatter content-frontmatter]
-      [println content-frontmatter]
+      [build-prev-next-list ctx]
       [build-content ctx
                      [tree/ref ctx :content-root-dir]
                      content-frontmatter

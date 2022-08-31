@@ -80,16 +80,20 @@
       [def name [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]]
       [def depth [- [length [split name "/"]] 1]]
       [def href [if [tree? target]
-                    [ref target :href]
+                    [tree/ref target :href]
                     target]]
       [dotimes [i depth href]
         [set! href [cat "../" href]]]]
 
 [defn render-link* [ctx path target]
-      [fmt "<a href=\"{}\">{}</a>"
-           [get-href* ctx path target]
-           [or [ref target :nav-title]
-               [ref target :title]]]]
+      [if [string? target]
+          [render-link* ctx path [tree/ref [tree/ref ctx :frontmatter] [string->keyword target]]]
+          [fmt "<a href=\"{}\">{}</a>"
+               [get-href* ctx path target]
+               [if [tree? target]
+                   [or [tree/ref target :nav-title]
+                       [tree/ref target :title]]
+                   target]]]]
 
 [defn parse [+theme-path+ raw-theme-text]
       :export
@@ -99,6 +103,10 @@
                            [def parts [split-frontmatter [slurp path]]]
                            [def *page-meta* [parse-frontmatter [car parts]]]
                            [def content [parse-content ctx path [cdr parts] *page-meta*]]
+                           [def this-href [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]]
+                           [def this-prev-next [tree/ref [tree/ref ctx :prev-next-nav] [string->keyword this-href]]]
+                           [def this-prev [and this-prev-next [tree/ref this-prev-next :prev]]]
+                           [def this-next [and this-prev-next [tree/ref this-prev-next :next]]]
 
                            [defn render-link [target]
                                  [render-link* ctx path target]]

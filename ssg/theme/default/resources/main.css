@@ -37,6 +37,27 @@ pre { overflow: auto;
       font-family: 'Courier New', Courier, monospace;
 }
 
+nav.chapter-nav {
+    border-top: solid 1px #000;
+    padding-top:0.5rem;
+    margin-top:3rem;
+}
+
+nav.chapter-nav::after {
+    content:'';
+    display:block;
+    position:relative;
+    clear:both;
+}
+
+nav.chapter-nav .prev-chapter {
+    float:left;
+}
+
+nav.chapter-nav .next-chapter {
+    float:right;
+}
+
 footer {
 	margin-top: 4rem;
 }
@@ -51,7 +72,7 @@ footer div {
 }
 
 main {
-    padding-top: 1em;
+    padding-top: 2rem;
     margin:0px auto;
     width:100%;
     display:block;
