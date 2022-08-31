@@ -19,6 +19,9 @@
       <div>
         by {{ [or [ref ctx :author] "Anonymous"] }}
       </div>
+      <div>
+        {{ [and [ref *page-meta* :date] [cat "Published " [ref *page-meta* :date]]] }}
+      </div>
     </footer>
   </body>
 </html>

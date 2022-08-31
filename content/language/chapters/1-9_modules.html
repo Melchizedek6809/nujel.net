@@ -1,21 +1,72 @@
 +++
 title: "1.9 - Modules"
 date: "2022-08-31"
-unstable: #t
 +++
 
-<h1>Modules - <warning-text>unstable</warning-text></h1>
-<p>The Nujel module system is mostly modeled after ES6 Modules</p>
+<box-wrap box-color="red">
+    <h3>Warning</h3>
+    <p>This subsystem is still considered unstable and may change <b>drastically</b>, so be careful when depending on specific behaviour.</p>
+</box-wrap>
 
-<h2>Expected changes</h2>
-<p>The exact forms used for import/export might change, as well as exact error messages/keywords.</p>
+<h1>Modules</h1>
+<p>To help with organizing bigger projects Nujel includes a module system, this allows programmers to reuse short and simple names and also constrains interactions into a (hopefully) manageable area.</p>
+<p>There are currently 2 main sources for modules:</p>
+<ul>
+    <li>Built into the executable as part of the standard library</li>
+    <li>Loaded from the filesystem</li>
+</ul>
+<p>They mainly differ by using different types to specify their names, either keywords for built-ins or strings for external modules.</p>
 
-<h2>No single/shared namespace</h2>
-<p>In Nujel there is no single/shared namespace, so there is no way to reference a particular value without importing it first.</p>
+<h3>Importing from built-in modules</h3>
+<p>Let's start with some simple example on how to import a function from a builtin stdlib module:</p>
+<pre class="source source-nujel">
+[import [red] :ansi]
+[println [red "Test"]] ; This should be printed in red in most terminal
+[import [blue green] :ansi] ; You can also import multiple symbols at once
+[println [cat [blue "Te"] [green "st"]]]
+[import [yellow :as ansi-yellow] :ansi] ; Renaming is also possible
+[println [ansi-yellow "Test"]]
+</pre>
 
-<h2>Every symbol needs to be explicitly imported before usage</h2>
-<p>Of course everything in <code>:core</code> is available by default, but apart from that everything needs to be requested explicitly. This should make upgrading much simpler since modules can provide incompatible functionality under a different symbol.</p>
+<box-wrap box-color="yellow">
+    <h3>Expected changes</h3>
+    <p>The names of the builtin modules will very likely change, they will most likely get a single prefix so <code>:ansi</code> becomes <code>:core/ansi</code></p>
+</box-wrap>
 
-<h2>Only way to import all symbols from another module is by requesting every export as a map</h2>
-<p>This is a way of importing everything from a module, without the possibility of inadvertently shadowing symbols</p>
+<h3>Writing your own modules</h3>
+<p>You don't need to do anything special, every Nujel source file can be treated as a module. When it is imported for the first time all top-level code will be executed and all values marked for :export will be added to a map. The name is also determined by the path in the filesystem.</p>
+<pre class="source source-nujel">
+; test.nuj
+[defn test []
+        :export  ; The easiest way to export is to decorate your [defn] forms with the :export keyword, it will export the function with the name specified
+        [println "Test has been called!"]]
+[defn test-2 []
+        :export-as test-zwei  ; You can also use the :export-zwei decorator if you want different internal and external names
+        [println "Test has been called!"]]
 
+[def internal-value 123]
+[export exported-value internal-value] ; Exporting arbitrary values is best done with the [export] macro, it has pretty much the same form as [def]
+</pre>
+
+<h3>Importing external modules</h3>
+<p>To import modules from the filesystem, mainly ones you wrote yourself, you need to specify a relative path to the file, without the .nuj ending.</p>
+<pre class="source source-nujel">
+; test.nuj
+[defn test []
+        :export
+        [println "Test has been called!"]]
+
+; main.nuj
+[import [test] "./test"]
+[test] ; => "Test has been called!"
+</pre>
+
+<h3>Executing modules</h3>
+<p>One uncommon feature of the Nujel module system might be that there is no big distinction between executables and libraries, executable modules just have to export a [main] function which then might be called with the commandline arguments.</p>
+<p>This enables the runtime to bundle multiple executable modules within the main executable, for example right now the REPL, Help screen and C Asset Code generator are all executable modules contained in the default stdlib.</p>
+<p>Nujel defaults to executing the REPL module, but you can change that by for example specifying <code>nujel -m :games/guess</code> which should start a very simple guess the number game.</p>
+
+<box-wrap box-color="green">
+    <h3>Reasoning</h3>
+    <p>I got inspired by Oberon here, and so far it has already become quite convenient to be able to bundle multiple "executables" with Nujel.  It should become even more interesting once adding custom modules into a Nujel binary becomes easier and we enable for the default module to be changed easily. Then we could build specialized Nujel runtimes for specific programs with the end user not needing to know that it was built with Nujel.
+</box-wrap>

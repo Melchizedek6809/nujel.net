@@ -5,13 +5,13 @@ date: "2022-08-31"
 
 <h1>Parentheses</h1>
 <p>Nujel uses the S-Expression notation as used by languages such as <i>Lisp</i>, <i>Scheme</i> and <i>Clojure</i>, but with one difference: Nujel defaults to using brackets instead of parentheses. This is mainly because brackets are much easier to type with a default US keyboard layout. You can still use parentheses if you must, since the two are completely interchangeable.</p>
-<pre>
+<pre class="source source-nujel">
 [+ 1 2] ; => 3
 (+ 1 2) ; => 3
 </pre>
 
 <p>Dotted pairs are also supported:</p>
-<pre>
+<pre class="source source-nujel">
 [car '[a . b]] ; => a
 [cdr '[a . b]] ; => b
 [car [cons 1 2]] ; => 1
