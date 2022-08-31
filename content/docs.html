@@ -1,0 +1,16 @@
++++
+title: "Documentation"
+nav-title: "Documentation"
+date: "2022-08-31"
++++
+
+<h1>Documentation</h1>
+
+<h2>Stable</h2>
+<p>These documents describe parts of the language that are very unlikely to change except for details.</p>
+<nav>
+    {{ [join [sort [map [navigation 1] [fn [v] [render-link v]]]] "<br/>"] }}
+</nav>
+
+<h2>Experimental</h2>
+<p>If there is no documentation available for a feature/system then it might change drastically in future versions, so please keep that in mind when writing code using those parts of the language.</p>

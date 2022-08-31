@@ -1,0 +1,21 @@
++++
+title: "1.9 - Modules"
+date: "2022-08-31"
+unstable: #t
++++
+
+<h1>Modules - <warning-text>unstable</warning-text></h1>
+<p>The Nujel module system is mostly modeled after ES6 Modules</p>
+
+<h2>Expected changes</h2>
+<p>The exact forms used for import/export might change, as well as exact error messages/keywords.</p>
+
+<h2>No single/shared namespace</h2>
+<p>In Nujel there is no single/shared namespace, so there is no way to reference a particular value without importing it first.</p>
+
+<h2>Every symbol needs to be explicitly imported before usage</h2>
+<p>Of course everything in <code>:core</code> is available by default, but apart from that everything needs to be requested explicitly. This should make upgrading much simpler since modules can provide incompatible functionality under a different symbol.</p>
+
+<h2>Only way to import all symbols from another module is by requesting every export as a map</h2>
+<p>This is a way of importing everything from a module, without the possibility of inadvertently shadowing symbols</p>
+

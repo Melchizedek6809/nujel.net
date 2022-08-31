@@ -12,7 +12,7 @@ pre { overflow: auto;
       background: #fcfdff;
       color: #333;
       padding: .75em .5em;
-      font-family: (unquote mono-font)
+      font-family: 'Courier New', Courier, monospace;
 }
 
 footer {
@@ -73,11 +73,17 @@ a.anchor {
 .tag-low { font-size: .8em; font-weight: 200 }
 .tag-medium { font-size: 1.2em; font-weight: 600 }
 .tag-high { font-size: 1.8em; font-weight: 800 }
-tt { font-size: .9em; font-family: (unquote mono-font) }
+tt { font-size: .9em; font-family: 'Courier New', Courier, monospace; }
+
+warning-text {
+    color:#f31;
+}
 
 code {
-    background: #eee;
+    background: #ddd;
+    font-family: 'Courier New', Courier, monospace;
     color:#444;
+    padding:0.05rem 0.2rem;
     display: inline-block;
 }
 
