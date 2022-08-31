@@ -75,6 +75,12 @@ a.anchor {
 .tag-high { font-size: 1.8em; font-weight: 800 }
 tt { font-size: .9em; font-family: (unquote mono-font) }
 
+code {
+    background: #eee;
+    color:#444;
+    display: inline-block;
+}
+
 /* Stolen from lisppaste for the colorize output of 3bmd */
 .paste { background-color: #F4F4F4; color: black; }
 .paste:hover { background-color: #F4F4F4; color: black; }

@@ -9,7 +9,7 @@
   <body>
     <header>
       <nav>
-        {{ [join [map [navigation] [fn [v] [render-link v]]] " | "] }}
+        {{ [join [map [navigation 0] [fn [v] [render-link v]]] " | "] }}
       </nav>
     </header>
     <main>

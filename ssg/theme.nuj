@@ -62,6 +62,12 @@
 [defn parse-content [ctx path raw-content *page-meta*]
       "Parses content, evaluating all embedded Nujel forms"
       :export
+      [defn render-link [target]
+            [render-link* ctx path target]]
+      [defn get-href [target]
+            [get-href* ctx path target]]
+      [defn navigation [depth]
+            [navigation/build ctx depth]]
       [eval [cons 'cat [theme/split raw-content]]]]
 
 [defn parse-frontmatter [fm]
@@ -70,11 +76,20 @@
       [def expr [read fm]]
       [apply tree/new expr]]
 
+[defn get-href* [ctx path target]
+      [def name [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]]
+      [def depth [- [length [split name "/"]] 1]]
+      [def href [if [tree? target]
+                    [ref target :href]
+                    target]]
+      [dotimes [i depth href]
+        [set! href [cat "../" href]]]]
+
 [defn render-link* [ctx path target]
-  [fmt "<a href=\"{}\">{}</a>"
-       [ref target :href]
-       [or [ref target :nav-title]
-           [ref target :title]]]]
+      [fmt "<a href=\"{}\">{}</a>"
+           [get-href* ctx path target]
+           [or [ref target :nav-title]
+               [ref target :title]]]]
 
 [defn parse [+theme-path+ raw-theme-text]
       :export
@@ -86,15 +101,18 @@
                            [def content [parse-content ctx path [cdr parts] *page-meta*]]
 
                            [defn render-link [target]
-                             [render-link* ctx path target]]
-                           [defn navigation []
-                             [navigation/build ctx]]
+                                 [render-link* ctx path target]]
+                           [defn get-href [target]
+                                 [get-href* ctx path target]]
+                           [defn navigation [depth]
+                                 [navigation/build ctx depth]]
                            [defn include-resource [res-path]
-                             [include-resource* ctx [fmt "{+theme-path+}/{res-path}"] res-path]]
+                                 [include-resource* ctx [fmt "{+theme-path+}/{res-path}"] res-path]
+                                 [get-href res-path]]
                            [defn page-title []
-                             [def ct [ref *page-meta* :title]]
-                             [if ct
-                                 [fmt "{} - {}" [ref ctx :title] ct]
-                                 [ref ctx :title]]]
+                                 [def ct [ref *page-meta* :title]]
+                                 [if ct
+                                     [fmt "{} - {}" [ref ctx :title] ct]
+                                     [ref ctx :title]]]
                            ~theme-parts]]
       [eval theme-form]]

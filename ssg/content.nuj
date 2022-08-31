@@ -21,6 +21,7 @@
       [when-not [path/content? path] [return #nil]]
       [def fm [parse-frontmatter [frontmatter [slurp path]]]]
       [tree/set! fm :href name]
+      [tree/set! fm :depth [- [length [split name "/"]] 1]]
       [tree/set! content-frontmatter [string->keyword name] fm]]
 
 [defn build-content [ctx path content-frontmatter build-fun]
@@ -35,7 +36,6 @@
       "Build everything"
       :export
       [println ctx]
-      [mkdir [tree/ref ctx :deploy-dir]]
       [def content-frontmatter @[]]
       [build-content ctx
                      [tree/ref ctx :content-root-dir]
@@ -45,6 +45,7 @@
                                            [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
                                            content-frontmatter]]]
       [tree/set! ctx :frontmatter content-frontmatter]
+      [println content-frontmatter]
       [build-content ctx
                      [tree/ref ctx :content-root-dir]
                      content-frontmatter

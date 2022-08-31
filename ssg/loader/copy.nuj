@@ -4,6 +4,7 @@
 [defn build [ctx path]
       "Loader that just copies the file over"
       [def dest-path [get-out-path ctx path]]
+      [mkdir [path/dirname dest-path]]
       [file/copy path dest-path]
       dest-path]
 
