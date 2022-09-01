@@ -29,14 +29,15 @@ ul > li {
     list-style-position: inside;
 }
 
-pre { overflow: auto;
-      margin-left: 1em;
-      padding: 0.5em;
-      border-left: 1px dashed;
-      background: #fcfdff;
-      color: #333;
-      padding: .75em .5em;
-      font-family: 'Courier New', Courier, monospace;
+pre { 
+    overflow: auto;
+    margin-left: 1em;
+    padding: 0.5em;
+    border-left: 1px dashed;
+    background: #fcfdff;
+    color: #333;
+    padding: .75em .5em;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 nav.top-chapter-nav {
