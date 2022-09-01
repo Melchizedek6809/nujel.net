@@ -9,4 +9,4 @@
       [spit dest-path [render ctx path]]
       [return dest-path]]
 
-[add-loader :otherwise build]
+[add-loader :html build]

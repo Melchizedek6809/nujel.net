@@ -5,21 +5,37 @@
     <meta http-equiv="content-type" content="text/html;" charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ [include-resource "resources/main.css"] }}"/>
+    {{
+      [when [tree/ref ctx :favicon]
+            [fmt "<link rel=\"icon\" rel=\"icon\" type=\"image/png\" href=\"{}\"/>" [get-href [tree/ref ctx :favicon]]]]
+    }}
+    {{ 
+      [defn render-prev-next-nav []
+            [when [and [not [tree/ref *page-meta* :hide-prev-next]] [or this-prev this-next]]
+                  [cat [fmt "<div class=\"prev-chapter\">{}</div>" [render-link this-prev]]
+                       [fmt "<div class=\"next-chapter\">{}</div>" [render-link this-next]]]]]
+      #nil
+    }}
   </head>
   <body>
     <header>
-      <nav>
-        {{ [join [sort [map [navigation 0] [fn [v] [render-link v]]]] " | "] }}
+      <nav class="top-nav">
+        {{
+          [when [tree/ref ctx :logo]
+                [fmt "<a class=\"logo-link\" href=\"{}\"><img src=\"{}\"/><span>{}</span></a>" [get-href "index.html"] [get-href [tree/ref ctx :logo]] [tree/ref ctx :logo-text]]]
+        }}
+        {{ [join [sort [map [navigation 0] [fn [v] [render-link v]]]] ""] }}
       </nav>
     </header>
     <main>
+      <nav class="chapter-nav top-chapter-nav">
+        {{ [render-prev-next-nav] }}
+      </nav>
+
       {{ content }}
-      <nav class="chapter-nav">
-      {{
-        [when [and [not [tree/ref *page-meta* :hide-prev-next]] [or this-prev this-next]]
-              [cat [fmt "<div class=\"prev-chapter\">{}</div>" [render-link this-prev]]
-                   [fmt "<div class=\"next-chapter\">{}</div>" [render-link this-next]]]]
-      }}
+
+      <nav class="chapter-nav bottom-chapter-nav">
+        {{ [render-prev-next-nav] }}
       </nav>
     </main>
     <footer>
@@ -27,7 +43,8 @@
         by {{ [or [ref ctx :author] "Anonymous"] }}
       </div>
       <div>
-        {{ [and [ref *page-meta* :date] [cat "Published " [ref *page-meta* :date]]] }}
+        {{ [and [tree/ref *page-meta* :date]
+                [cat "Published " [tree/ref *page-meta* :date]]] }}
       </div>
     </footer>
   </body>

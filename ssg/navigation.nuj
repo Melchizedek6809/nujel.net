@@ -29,5 +29,6 @@
   :export
   [-> [tree/values [tree/ref ctx :frontmatter]]
       [filter [fn [a] [== depth [tree/ref a :depth]]]]
+      [filter [fn [a] [not [tree/ref a :hide-in-nav]]]]
       [list/sort [fn [a b] [< [tree/ref a :href]
                               [tree/ref b :href]]]]]]

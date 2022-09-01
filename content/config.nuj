@@ -1,2 +1,5 @@
 @[ :title "Nujel.net"
-   :author "Ben"]
+   :author "Ben"
+   :logo "img/logo.png"
+   :logo-text "Nujel"
+   :favicon "favicon.png" ]
