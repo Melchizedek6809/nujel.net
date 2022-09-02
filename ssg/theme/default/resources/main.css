@@ -235,9 +235,29 @@ code {
     border: none;
     border-left: dotted 1px #13f;
     color: #000;
-    background-color:transparent;
     background-color: #13f2;
     line-height:1.3rem;
+}
+
+table {
+    border-collapse: collapse;
+    width:100%;
+    overflow-x:auto;
+}
+
+table tbody tr:first-child td {
+    border-top: none;
+}
+
+table th {
+    background-color: #13f2;
+    text-align:left;
+    padding:0.3rem 0.3rem 0.1rem;
+}
+
+table td {
+    border:solid 1px #13f4;
+    padding:0.1rem 0.3rem;
 }
 
 /* Stolen from lisppaste for the colorize output of 3bmd */

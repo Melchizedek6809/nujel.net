@@ -1,20 +1,40 @@
 +++
 title: "1.7 - Variables"
-date: "2022-08-31"
+date: "2022-09-02"
 +++
 
 <h1>Variables</h1>
-<p>You can define new variables using <code>def</code> and give old variables a new value using <code>set!</code>.  You can use <code>let</code> if you only want a variable visible to a small section of code.</p>
-<p>Unlike most other Lisps using <code>let</code> is discouraged in most situations, since you can just use <code>def</code> within a function call in order to define temporary variables.</p>
+<p>Variables in Nujel work like in most dynamically-typed languages, nothing too suprising here.</p>
+
+<h3>1. Defining variables</h3>
+<p>You can define new variables using <code>def</code> and give old variables a new value using <code>set!</code>.</p>
 <pre class="source source-nujel">
 my-temp ; You can access a variables value by evaluating the symbol
 ; => :unbound-variable
 [def my-temp 123] ; Of course it needs to be defined first
 ; => 123
+my-temp
+; => 123
+</pre>
+
+<h3>2. Setting variables</h3>
+<p>If you wish to change the value already associated with a given symbol, you can use <code>set!</code> to achieve that.</p>
+<pre class="source source-nujel">
+[def my-temp 123] ; Gotta define it first before we can use set!
 [set! my-temp 234]
 my-temp
 ; => 234
-[def double [fn [a] [* a a]]] ; You can also define functions this way, although defn should be preferred because it gives better error messages/stack traces
-[double 4]
-; => 16
+</pre>
+
+<h3>3. Let blocks</h3>
+<p>You can use <code>let</code> to create a new context for assignments, you still have access to all symbols defined in parent contexts.</p>
+<box-wrap box-color="red">
+    <h3>Warning</h3>
+    <p>Currently you can shadow already defined variables, this is highly discouraged and will probably become an error in later Nujel versions. This is because it has already led to some bugs and makes some optimizations more complicated.</p>
+</box-wrap>
+<p>Unlike most other Lisps using <code>let</code> is discouraged in most situations, since you can just use <code>def</code> within a function call in order to define temporary variables, it is available though and should work like in <i>Scheme</i> or <i>CL</i>.</p>
+<pre class="source source-nujel">
+[let [[new-temp 123]]
+     [println new-temp]] ; => 123
+new-temp ; => :unbound-variable
 </pre>

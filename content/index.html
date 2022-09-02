@@ -1,14 +1,102 @@
 +++
 title: #nil
 nav-title: "Home"
-date: "2022-08-21"
+date: "2022-09-02"
 hide-prev-next: #t
 hide-in-nav: #t
 +++
 
-<h1>Welcome</h1>
-<p>Not much to read yet</p>
-<h3>Frontmatter based page-meta:</h3>
-<pre>
-  {{ [fmt "{*page-meta*:?}"] }}
-</pre>
+<h1>The Nujel Programming Language</h1>
+<p>Nujel is a Lisp dialect intended to be small, fast and easy to embed in existing codebases.</p>
+<h4>Nujel is small</h4>
+<p>Currently (2022-09-02) a static Linux binary using the musl libc is about <b>312KB</b> in size. Dynamically linked ones are about <b>276KB</b> and using <i>UPX</i> on that one yields a <b>92KB</b> binary.</p>
+<h4>Nujel is fast</h4>
+<p>Nujel is already quite fast, at least compared to other tiny/embedded lisps/schemes. It will get quite a bit faster in the future as well since right now there are still lots of obvious optimizations available.</p>
+<h4>Nujel is embeddable</h4>
+<p>To make embedding easier Nujel is written mostly in Nujel itself, only requiring a small VM which is written in C99 that needs no external dependencies apart from the libc. You can also generate a single header file for Nujel using the <code>make nujel.h</code> command which you can then use like most stb libraries.</p>
+<h4>Nujel is portable</h4>
+<p>Because of the embeddable nature of Nujel it should be quite portable, since the existing codebase might be targeting something other than *nix/amd64. To make sure that Nujel stays portable we make extensive use of the CI to test on various platforms, as well as manual testing of less common configurations. The following Platforms are supported/tested:</p>
+<table>
+  <thead>
+    <tr>
+      <th>μArch</th>
+      <th>OS</th>
+      <th>Toolchain</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>amd64</td>
+      <td>Windows Server 2019 | 2022</td>
+      <td>mingw32 | mingw64 | ucrt64 | clang64</td>
+      <td><a href="https://github.com/Melchizedek6809/Nujel/actions">GitHub CI</a></td>
+    </tr>
+    <tr>
+      <td>amd64</td>
+      <td>MacOS 11 | 12</td>
+      <td>clang</td>
+      <td><a href="https://github.com/Melchizedek6809/Nujel/actions">GitHub CI</a></td>
+    </tr>
+    <tr>
+      <td>amd64</td>
+      <td>Ubuntu 20.04 | 22.04</td>
+      <td>gcc | clang</td>
+      <td><a href="https://github.com/Melchizedek6809/Nujel/actions">GitHub CI</a></td>
+    </tr>
+    <tr>
+      <td>amd64</td>
+      <td>Arch Linux</td>
+      <td>gcc | clang | tcc-git | bmake+gcc</td>
+      <td><a href="https://builds.sr.ht/~melchizedek6809/Nujel/">SourceHut CI</a></td>
+    </tr>
+    <tr>
+      <td>aarch64</td>
+      <td>Debian Sid</td>
+      <td>gcc</td>
+      <td><a href="https://builds.sr.ht/~melchizedek6809/Nujel/">SourceHut CI</a></td>
+    </tr>
+    <tr>
+      <td>amd64</td>
+      <td>Guix | Rocky Linux | Alpine Linux</td>
+      <td>gcc</td>
+      <td><a href="https://builds.sr.ht/~melchizedek6809/Nujel/">SourceHut CI</a></td>
+    </tr>
+    <tr>
+      <td>amd64</td>
+      <td>FreeBSD | OpenBSD | NetBSD</td>
+      <td>system default</td>
+      <td><a href="https://builds.sr.ht/~melchizedek6809/Nujel/">SourceHut CI</a></td>
+    </tr>
+    <tr>
+      <td>amd64</td>
+      <td>DragonflyBSD | HaikuOS</td>
+      <td>system default</td>
+      <td>Irregular manual testing</td>
+    </tr>
+    <tr>
+      <td>WASM</td>
+      <td>Modern Browsers</td>
+      <td>Emscripten</td>
+      <td>Irregular manual testing</td>
+    </tr>
+    <tr>
+      <td>macppc (big endian)</td>
+      <td>OpenBSD</td>
+      <td>gcc</td>
+      <td>Irregular manual testing</td>
+    </tr>
+    <tr>
+      <td>armv7 | aarch64</td>
+      <td>RaspberryPI OS</td>
+      <td>gcc</td>
+      <td>Irregular manual testing</td>
+    </tr>
+    <tr>
+      <td>amd64</td>
+      <td>Windows 10</td>
+      <td>Visual Studio</td>
+      <td>Irregular manual testing (still not quite stable)</td>
+    </tr>
+  </tbody>
+</table>
