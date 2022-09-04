@@ -4,20 +4,38 @@ date: "2022-08-31"
 +++
 
 <h1>Quote / Quasiquote</h1>
-<p>Quote works as you would expect, quasiquote however uses the clojure syntax for <code>unquote</code>/<code>unquote-splicing</code>. This is because I want to be able to treat <code>,</code> as white-space (it also looks very similar to a period, which I dislike).</p>
+<p>Symbols are mostly used as references to other values and are implicitly resolved wherever they appear. Sometimes however you may want have a symbol stay a symbol. To achieve this you can use <code>quote</code> and <code>quasiquote</code>.</p>
+
+<h3>1. Quote</h3>
+<p>If you want to simply return a value as is, meaning a symbol without resolving it, or a list instead of evaluating it as a from then you can use <code>quote</code>.</p>
+<p>Since this is quite the common occurence there is a special reader form to make this more convenient: <code>'</code>. By prefixing any symbol with a single quote it will be used as is, without any attempt to resolve it.</p>
+<p>Quote can not only be used to inhibit the implicit behaviour of symbol resolution, but can also stop expressions from being evaluated and instead being passed along as simple lists. This allows for the easy inclusion of literal lists.</p>
 <pre class="source source-nujel">
-'a ; You can quote symbols
-; => a
+    'a ; You can quote symbols
+    ; => a
+    
+    '[1 2 3] ; Or forms, making them plain lists
+    ; => [1 2 3]
+    
+    '(1 2 3) ; With parentheses or brackets
+    ; => [1 2 3]
+</pre>    
 
-'[1 2 3] ; Or lists
-; => [1 2 3]
-
-'(1 2 3) ; With parentheses or brackets
-; => [1 2 3]
-
+<h3>2. Quasiquote</h3>
+<p>What is one supposed to do if one wants to quote only parts of an expression though? You could build it up using <code>cons</code>,<code>list</code> and quote but there is a more convenient way for that: <code>quasiquote</code>.</p>
+<p>Just like quote there is an associated reader form, the backtick: <code>`</code> which mostly works just like a regular quote, with the distinction that contained <code>unquote</code> and <code>unquote-splicing</code> forms <b>won't</b> be quoted but actually be evaluated, they have the reader form <code>~</code> and <code>~@</code>, just like Clojure.</p>
+<box-wrap box-color="green">
+    <h3>Reasoning</h3>
+    <p>I chose the Clojure style over Scheme/Lisp because using a <code>,</code> for unquoting would make it non-whitespace, making its use as a thousands separator very problematic.</p>
+</box-wrap>
+<pre class="source source-nujel">
 `[1 2 ~[+ 1 1 1]] ; To unquote you can use a tilde
 ; => [1 2 3]
 
 `[1 ~@[list 2 3]] ; And ~@ for unquote-splicing
 ; => [1 2 3]
 </pre>
+<box-wrap box-color="yellow">
+    <h3>Implementation detail</h3>
+    <p>Unlike in other Lisp/Scheme implementations Quasiquote is just a regular macro, this shouldn't make a difference in most cases but might trip you up if you delve deeper into the runtime.</p>
+</box-wrap>
