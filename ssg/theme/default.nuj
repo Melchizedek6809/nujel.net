@@ -1,9 +1,10 @@
 [import [parse :as theme/parse] "../theme"]
 
 [def +theme-path+ [fmt "{}/default" *module-path*]]
-[def base-template [theme/parse +theme-path+ [slurp [fmt "{+theme-path+}/base.html"]]]]
+[def main-template [theme/parse +theme-path+ [slurp [fmt "{+theme-path+}/templates/main.html"]]]]
 
 [defn render [ctx path]
       "Apply the default theme to a particular path"
       :export
-      [base-template ctx path]]
+      [main-template ctx path]]
+
