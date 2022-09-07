@@ -1,5 +1,5 @@
 [defn deploy [ctx]
       "Deploy everything for CTX"
       :export
-      [pfmtln "Deploying: {ctx}"]
+      [pfmtln "Deploying!"]
       [return ctx]]

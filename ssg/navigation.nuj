@@ -20,8 +20,6 @@
           [when-not [tree/ref nav cur-href] [tree/set! nav cur-href @[:prev #nil :next #nil]]]
           [tree/set! [tree/ref nav cur-href] :next next-href]]
         [cdr! c]]
-
-      [pfmtln "\n\n{:?}\n\n" nav]
       [tree/set! ctx :prev-next-nav nav]]
 
 [defn build [ctx depth]
