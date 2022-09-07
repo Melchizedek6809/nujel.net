@@ -4,28 +4,63 @@ date: "2022-08-31"
 +++
 
 <h1>Arithmetic operations</h1>
+<p>One big difference as compared to other Lisps is that Nujel does not support rational numbers or complex numbers by default, all operations are done on fixnums and flonums, with not added checks for overflows.</p>
+<box-wrap box-color="green">
+    <h3>Reasoning</h3>
+    <p>This is mostly to keep Nujel as minimal as possible, since it wouldn't seem to benefit any project being written in Nujel right now, and might have a performance impact due to the additional checks.</p>
+</box-wrap>
 
-<p>Nujel supports most widely used operators directly and tries to use the same names as <i>Clojure</i> does.</p>
+<h3>1. Basic operators</h3>
+<p>Nujel supports most standard operators for integers as well as floating-point numbers (or fixnums and flonums). There is no operation called mod/modulo, but instead it is called <code>rem</code>, just like in <i>Clojure</i>.</p>
+<p>Division will also always return a flonum, if you want to do an integer division you can use <code>div/int</code> instead. Apart from that doing operations between fixnums and flonums will result in a flonum, with fixnums only being returned when both operands are fixnums.</p>
 
 <pre class="source source-nujel">
 [+ 1 2 3 4] ; You can add as many numbers as you want
 ; => 10
+
 [+ 1 2 [+ 3 4]]
 ; => 10
+
 [+ [+ 1 2] [+ 3 4]]
 ; => 10
+
 [+ 1 -2] ; You can also use negative numbers in additions
 ; => -1
+
 [+ 1 [- 2]] ; - can also be used to negate numbers
 ; => -1
+
 [+ 1 [- [+ 1 1]]] ; Results of a calculation can also be negated
 ; => -1
-[+ 1 :two "drei"] ; You can only calculate with numbers
+
+[+ 1 "drei"] ; You can only calculate with numbers
 ; => :type-error
-[def my-var 123]
-[* 2 my-var] ; Using variables is fine as long as they are of a numeric type
-; => 246
-[def my-string "tausend"]
-[* 2 my-string]
-; => :type-error
+</pre>
+
+<h3>2. Exceptions</h3>
+<p>Dividing through zero generates an exception, which is probably not that suprising, this however also extends to floating point operations where NaN as well as +/-Inf are invalid values that Nujel will not create, instead raising an Exception.</p>
+
+<box-wrap box-color="green">
+    <h3>Reasoning</h3>
+    <p>This seems to be an inconsitency in how integers and floating-point numbers are handled, since I can't think of time where I wanted a NaN/Inf value it seems reasonable to me to handle this case just like integers, meaning raising an exception.</p>
+</box-wrap>
+
+<pre class="source source-nujel">
+[/ 10 0]
+; => :float-inf
+
+[div/int 10 0]
+; => :divide-by-zero
+</pre>
+
+<h3>3. Conversion</h3>
+<p>Nujel also provides a couple of functions for converting between the different numeric formats.</p>
+<p>In general, Nujel will never implicitly convert a flonum to a fixnum, since that might mean loosing precision, if it does it is considered a bug in the implementation.</p>
+<p>It will however implicitly convert fixnum's to flownum's whenever that seems to be the least suprising choice.</p>
+<pre class="source source-nujel">
+[int 1.1]
+; => 1
+
+[float 1]
+; => 1.0
 </pre>
