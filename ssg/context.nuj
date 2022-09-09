@@ -7,5 +7,6 @@
          :content-root-dir "content"
          :deploy-dir "deploy"
          :theme :default
+         :components @[]
          :resources-needed @[]
          :loaders @[]]]

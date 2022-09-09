@@ -1,0 +1,5 @@
+{{
+[when [and [not [tree/ref [get-meta] :hide-prev-next]] [or [this-prev] [this-next]]]
+      [cat [fmt "<div class=\"prev-chapter\">{}</div>" [render-link [this-prev]]]
+           [fmt "<div class=\"next-chapter\">{}</div>" [render-link [this-next]]]]]
+}}

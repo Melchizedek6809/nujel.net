@@ -1,4 +1,4 @@
-[import [parse :as theme/parse] "../theme"]
+[import [parse :as theme/parse add-component] "../theme"]
 
 [def +theme-path+ [fmt "{}/default" *module-path*]]
 [def main-template [theme/parse +theme-path+ [slurp [fmt "{+theme-path+}/templates/main.html"]]]]
@@ -8,3 +8,11 @@
       :export
       [main-template ctx path]]
 
+[defn load-components [ctx]
+      "Load all the partials"
+      :export
+      [add-component ctx :Header [slurp [fmt "{+theme-path+}/components/Header.html"]]]
+      [add-component ctx :Favicon [slurp [fmt "{+theme-path+}/components/Favicon.html"]]]
+      [add-component ctx :Footer [slurp [fmt "{+theme-path+}/components/Footer.html"]]]
+      [add-component ctx :Logo [slurp [fmt "{+theme-path+}/components/Logo.html"]]]
+      [add-component ctx :PrevNextNav [slurp [fmt "{+theme-path+}/components/PrevNextNav.html"]]]]

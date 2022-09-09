@@ -1,0 +1,4 @@
+{{
+[when [tree/ref [get-ctx] :favicon]
+      [fmt "<link rel=\"icon\" rel=\"icon\" type=\"image/png\" href=\"{}\"/>" [get-href [tree/ref [get-ctx] :favicon]]]]
+}}
