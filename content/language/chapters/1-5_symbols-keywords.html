@@ -13,19 +13,18 @@ date: "2022-09-07"
 
 <h3>1. Symbols</h3>
 <p>Symbols in Nujel behave pretty much the same as in most other Lisps, in that they are implictly looked up unless quoted.</p>
-<pre class="source source-nujel">
-asd ; Every symbol is implicitly looked up, with an exception thrown on failure
+{{ [component :Nujel #nil
+"asd ; Every symbol is implicitly looked up, with an exception thrown on failure
 ; => :unbound-variable
 
 'asd ; By quoting a symbol this implicit look up can be disabled
 ; => asd
 
-[string->symbol "asd"] ; You can also turn any old string into a symbol, this is sometimes called interning a string
+[string->symbol \"asd\"] ; You can also turn any old string into a symbol, this is sometimes called interning a string
 ; => asd
 
-[== 'asd [string->symbol "asd"]] ; The two values actually point to the same underlying data structure
-; => #t
-</pre>
+[== 'asd [string->symbol \"asd\"]] ; The two values actually point to the same underlying data structure
+; => #t"] }}
 
 <box-wrap box-color="yellow">
     <h3>Implementation detail</h3>
@@ -35,8 +34,8 @@ asd ; Every symbol is implicitly looked up, with an exception thrown on failure
 <h3>2. Keywords</h3>
 <p>Since quoting can become quite tedious there is another very similar data type, keywords. They share most functionality with symbols with the main difference being that they will not be implicitly looked up.</p>
 <p>By pre- or suffixing a symbol with a <code>:</code> the reader will return a keywords.</p>
-<pre class="source source-nujel">
-:asd ; A keyword
+{{ [component :Nujel #nil
+":asd ; A keyword
 ; => :asd
     
 asd: ; Another keyword
@@ -46,8 +45,7 @@ asd: ; Another keyword
 ; => #t
     
 [= :asd [symbol->keyword 'asd]]
-; => #t
-</pre>
+; => #t"] }}
 
 <h3>3. Usage</h3>
 <p>Regarding their usage, keywords should be used when the keyword itself has a useful meaning, symbols should be used to label other values which could work just as well with another symbol associated.</p>

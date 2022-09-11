@@ -3,7 +3,6 @@
       :export
       @[ :path path
          :title "Some site"
-         :author "Anonymous"
          :content-root-dir "content"
          :deploy-dir "deploy"
 

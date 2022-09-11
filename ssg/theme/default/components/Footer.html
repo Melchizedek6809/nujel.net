@@ -1,8 +1,5 @@
-<div>
-  by {{ [or [ref [get-ctx] :author] "Anonymous"] }}
-</div>
-<div>
-  {{ [and [tree/ref [get-meta] :date]
-          [cat "Published " [tree/ref [get-meta] :date]]]
-  }}
-</div>
+{{
+  [case [tree/ref [get-meta] :type]
+        [:page [component :PageFooter]]
+        [otherwise ""]]
+}}

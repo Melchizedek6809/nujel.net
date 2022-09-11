@@ -5,14 +5,14 @@ date: "2022-08-31"
 
 <h1>Comments</h1>
 <p>Comments use Scheme syntax, and some SRFI's have been implemented directly.</p>
-<pre class="source source-nujel">
-; A single semicolon comments out everything until the next line
+{{ [component :Nujel #nil
+"; A single semicolon comments out everything until the next line
 (+ 1 #;2 3) ; You can use #; to comment out the following form, should be SRFI-62 compatible!
 ; => 4
 #|
  | Nujel also allows for SRFI-30 like nested Multi-line comments
  |#
-[comment [println "A message, never to be printed."]] ; Nujel also has a comment macro, this however returns #nil unlike #;
+[comment [println \"A message, never to be printed.\"]] ; Nujel also has a comment macro, this however returns #nil unlike #;"] }}
 </pre>
 
 <p>Apart from that it is recommended to use a single <code>;</code> at the end of a line to comment whatever is happening on that particular line.</p>

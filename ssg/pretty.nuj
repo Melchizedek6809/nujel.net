@@ -1,0 +1,14 @@
+[defn pp-nujel-top [source i pp]
+      [def len [buffer/length i]]
+      [while [< i len]
+        [def c [buffer/ref source i]]
+        [case c
+              [\; [set! i [pp-nujel-comment-eol source [inc i] pp]]]
+              [otherwise [pp 'char-write c]
+                         [inc/int i]]]]]
+
+[defn pretty-print-nujel [source]
+      :export
+      [def pp [make-string-output-port]]
+      [pp-nujel-top source 0 pp]
+      [pp 'return-string]]

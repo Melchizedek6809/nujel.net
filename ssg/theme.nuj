@@ -1,5 +1,9 @@
 [import [build :as navigation/build] "navigation"]
 
+[defn Nujel [source]
+      [import [pp-nujel] :pretty/nujel]
+      [pp-nujel source :html]]
+
 [def themes @[]]
 [defn add-theme [name mod]
       [tree/set! themes name [module/load mod [current-closure]]]]
@@ -67,15 +71,17 @@
       :export
       [cdr [split-frontmatter text]]]
 
+[defn get-frontmatter [path name raw-fm]
+      :export
+      [def fm [parse-frontmatter raw-fm]]
+      [when-not [tree/has? fm :type] [tree/set! fm :type :page]]
+      [tree/set! fm :href name]
+      [tree/set! fm :depth [- [length [split name "/"]] 1]]
+      [return fm]]
+
 [defn parse-content [ctx path raw-content *page-meta*]
       "Parses content, evaluating all embedded Nujel forms"
       :export
-      [defn render-link [target]
-            [render-link* ctx path target]]
-      [defn get-href [target]
-            [get-href* ctx path target]]
-      [defn navigation [depth]
-            [navigation/build ctx depth]]
       [eval [cons 'cat [theme/split raw-content]]]]
 
 [defn parse-frontmatter [fm]
@@ -136,6 +142,12 @@
 [defn navigation [depth]
       [navigation/build [get-ctx] depth]]
 
+[defn get-posts []
+      [def ret #nil]
+      [doseq [p [tree/values [tree/ref [get-ctx] :frontmatter]] ret]
+             [when [== :post [tree/ref p :type]]
+               [cons! p ret]]]]
+
 [defn include-resource [res-path]
       [include-resource* [get-ctx]
                          [fmt "{}/{res-path}" [get-component-path]]
@@ -169,7 +181,7 @@
       [component-fun props children]]
 
 [defn template [name props children]
-      [def template-fun [tree/ref [tree/ref [get-ctx] :templates] name]]
+      [def template-fun [tree/ref [tree/ref [get-ctx] :templates] [or name :page]]]
       [when-not template-fun [exception "Can't find a template named: " name]]
       [template-fun props children]]
 
@@ -198,8 +210,11 @@
 [defn render [ctx path]
       :export
       [def page-parts [split-frontmatter [slurp path]]]
-      [set-page-ctx! ctx path [parse-frontmatter [car page-parts]]]
-      [def content [parse-content ctx path [cdr page-parts] [get-meta]]]
-      [def ret [template :main #nil content]]
+      [def meta [get-frontmatter path
+                                 [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
+                                 [car page-parts]]]
+      [set-page-ctx! ctx path meta]
+      [def content [parse-content ctx path [cdr page-parts] meta]]
+      [def ret [template [tree/ref [get-meta] :type] meta content]]
       [reset-page-ctx!]
       [return ret]]

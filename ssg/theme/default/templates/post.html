@@ -7,18 +7,16 @@
     <link rel="stylesheet" href="{{ [include-resource "resources/main.css"] }}"/>
     {{ [component :Favicon] }}
   </head>
-  <body>
+  <body page-type="{{ [keyword->string [or [tree/ref props :type] :post]] }}">
     <header>
       {{ [component :Header] }}
     </header>
     <main>
-      <nav class="chapter-nav top-chapter-nav">
-        {{ [component :PrevNextNav] }}
-      </nav>
+      <h4 class="post-date">{{ [tree/ref props :date] }}</h4>
+      {{ [when [tree/ref props :author]
+               [cat "<h4 class=\"byline\">by " [tree/ref props :author] "</h4>"]] }}
+      <h1>{{ [tree/ref props :title] }}</h1>
       {{ children }}
-      <nav class="chapter-nav bottom-chapter-nav">
-        {{ [component :PrevNextNav] }}
-      </nav>
     </main>
     <footer>
       {{ [component :Footer] }}

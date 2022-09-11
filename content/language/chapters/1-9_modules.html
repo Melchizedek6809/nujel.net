@@ -19,14 +19,14 @@ date: "2022-08-31"
 
 <h3>1. Importing from built-in modules</h3>
 <p>Let's start with some simple example on how to import a function from a builtin stdlib module:</p>
-<pre class="source source-nujel">
-[import [red] :ansi]
-[println [red "Test"]] ; This should be printed in red in most terminal
+
+{{ [component :Nujel #nil
+"[import [red] :ansi]
+[println [red \"Test\"]] ; This should be printed in red in most terminal
 [import [blue green] :ansi] ; You can also import multiple symbols at once
-[println [cat [blue "Te"] [green "st"]]]
+[println [cat [blue \"Te\"] [green \"st\"]]]
 [import [yellow :as ansi-yellow] :ansi] ; Renaming is also possible
-[println [ansi-yellow "Test"]]
-</pre>
+[println [ansi-yellow \"Test\"]]"] }}
 
 <box-wrap box-color="yellow">
     <h3>Expected changes</h3>
@@ -35,31 +35,29 @@ date: "2022-08-31"
 
 <h3>2. Writing your own modules</h3>
 <p>You don't need to do anything special, every Nujel source file can be treated as a module. When it is imported for the first time all top-level code will be executed and all values marked for :export will be added to a map. The name is also determined by the path in the filesystem.</p>
-<pre class="source source-nujel">
-; test.nuj
+{{ [component :Nujel #nil
+"; test.nuj
 [defn test []
-        :export  ; The easiest way to export is to decorate your [defn] forms with the :export keyword, it will export the function with the name specified
-        [println "Test has been called!"]]
+      :export  ; The easiest way to export is to decorate your [defn] forms with the :export keyword, it will export the function with the name specified
+      [println \"Test has been called!\"]]
 [defn test-2 []
-        :export-as test-zwei  ; You can also use the :export-zwei decorator if you want different internal and external names
-        [println "Test has been called!"]]
+      :export-as test-zwei  ; You can also use the :export-zwei decorator if you want different internal and external names
+      [println \"Test has been called!\"]]
 
 [def internal-value 123]
-[export exported-value internal-value] ; Exporting arbitrary values is best done with the [export] macro, it has pretty much the same form as [def]
-</pre>
+[export exported-value internal-value] ; Exporting arbitrary values is best done with the [export] macro, it has pretty much the same form as [def]"] }}
 
 <h3>3. Importing your own modules</h3>
 <p>To import modules from the filesystem, mainly ones you wrote yourself, you need to specify a relative path to the file, without the .nuj ending.</p>
-<pre class="source source-nujel">
-; test.nuj
+{{ [component :Nujel #nil
+"; test.nuj
 [defn test []
-        :export
-        [println "Test has been called!"]]
+      :export
+      [println \"Test has been called!\"]]
 
 ; main.nuj
-[import [test] "./test"]
-[test] ; => "Test has been called!"
-</pre>
+[import [test] \"./test\"]
+[test] ; => \"Test has been called!\""] }}
 
 <h3>4. Executing modules</h3>
 <p>One uncommon feature of the Nujel module system might be that there is no big distinction between executables and libraries, executable modules just have to export a [main] function which then might be called with the commandline arguments.</p>

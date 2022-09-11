@@ -7,8 +7,8 @@ date: "2022-08-31"
 
 <p>Nujel supports normal decimal notation and treats <code>,</code>  and <code>_</code> as whitespace characters so you can split big numbers for increased legibility.  There is also special syntax for binary, octal and hexadecimal literals, scientific notation however is <b>not</b> supported.</p>
 
-<pre class="source source-nujel">
-9 ; probably not that suprising
+{{ [component :Nujel #nil
+"9 ; probably not that suprising
 ; => 9
 
 100,0; possible, but probably shouldn't be commited that way
@@ -38,5 +38,5 @@ date: "2022-08-31"
 0x123 ; Using an 0x prefix does NOT work and results in a read error being thrown
 ; => :read-error
 
--100 ; You can also write negative numbers
+-100 ; You can also write negative numbers"] }}
 </pre>

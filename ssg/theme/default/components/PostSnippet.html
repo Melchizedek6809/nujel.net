@@ -1,0 +1,10 @@
+<div class="post-snippet">
+	<h4 class="post-date">{{ [tree/ref props :date] }}</h4>
+	<h3>
+		<a href="{{ [get-href [tree/ref props :href]] }}">
+			{{ [tree/ref props :title] }}
+		</a>
+	</h3>
+	<p>{{ [tree/ref props :summary] }}</p>
+	<a href="{{ [get-href [tree/ref props :href]] }}">Read more</a>
+</div>

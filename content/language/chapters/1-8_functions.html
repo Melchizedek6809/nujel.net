@@ -8,50 +8,45 @@ date: "2022-09-01"
 
 <h3>1. Defining functions</h3>
 <p>Defining a function is best done with the <code>[defn]</code> macro if it is named, or <code>[fn]</code> for anonymous functions.</p>
-<pre class="source source-nujel">
-[defn double [α] [* 2 α]]
+{{ [component :Nujel #nil
+"[defn double [α] [* 2 α]]
 [double 2] ; => 4
 
 [def double [fn [b] [* 2 b]]]
-[double 2] ; => 4 
-</pre>
+[double 2] ; => 4"] }}
 
 <h3>2. Defining functions with a rest argument</h3>
 <p>In order to define a function that has a certain number of named arguments, and then a final catch-all argument you can use the dotted pair notation, just like in <i>Scheme</i>.</p>
-<pre class="source source-nujel">
-[defn multiply-vals [val . l]
+{{ [component :Nujel #nil
+"[defn multiply-vals [val . l]
       [map l [fn [v] [* v val]]]]
 [multiply-vals 2 1 2 3]
-; => [2 4 6]
-</pre>
+; => [2 4 6]"] }}
 
 <h3>3. Defining a functions with any amount of arguments</h3>
 <p>If you want to define a function that can take an arbitrary amount of arguments, you can just omit the brackets surrounding the argument list, this is just like you may be used from <i>Scheme</i>.</p>
-<pre class="source source-nujel">
-[defn my-list l l]
+{{ [component :Nujel #nil
+"[defn my-list l l]
 [my-list 1 2 3 4]
-; => [1 2 3 4]
-</pre>
+; => [1 2 3 4]"] }}
 
 <h3>4. Documenting functions</h3>
 <p>You can document your functions behaviour by having your functions start with a string literal (don't worry it will be optimized out of the final bytecode).</p>
 <p>Adding multiple string literals to the beginning results in the docstring being all strings joined by a linebreak, this makes it easier to add multi-line docstrings.</p>
 <p>In order to look up the docstring for any given function (even built-in ones) you can use the <code>[describe]</code> function </p>
-<pre class="source source-nujel">
-[defn double [α]
-      "Return α multiplied by 2"
+{{ [component :Nujel #nil
+"[defn double [α]
+      \"Return α multiplied by 2\"
       [* 2 α]]
-[double 2] ; => 4
-</pre>
+[double 2] ; => 4"] }}
 
 <h3>5. Function decorators</h3>
 <p>In order to tell the compiler some additional information about the function you are declaring, you can add keywords to the beginning of your function body.</p>
 <p>Right now we only support <code>:export</code> and <code>:export-as</code>, <code>:inline</code> also exists but is still very buggy. More are very likely to follow though.</p>
-<pre class="source source-nujel">
-[defn double [α]
+{{ [component :Nujel #nil
+"[defn double [α]
       :inline
-      "Return α multiplied by 2"
+      \"Return α multiplied by 2\"
       [* 2 α]]
 [double 2] ; => 4
-;; Doesn't really make much difference here, but helps especially with some simple predicates like [zero?]
-</pre>
+;; Doesn't really make much difference here, but helps especially with some simple predicates like [zero?]"] }}

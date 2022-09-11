@@ -10,14 +10,12 @@
                        [cat path "/" [car parts]]
                        [car parts]]]
         [cdr! parts]
-        [println path]
         [mkdir path]]]
 
 [defn build [ctx path]
       "Loader that just copies the file over"
       [def dest-path [get-out-path ctx path]]
       [mkdir-safe [path/dirname dest-path]]
-      [println dest-path]
       [spit dest-path [render ctx path]]
       [return dest-path]]
 

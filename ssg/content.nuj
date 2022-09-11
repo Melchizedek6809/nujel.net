@@ -1,5 +1,5 @@
 [import [build :as loader/build] "loader"]
-[import [parse-frontmatter frontmatter] "theme"]
+[import [parse-frontmatter frontmatter get-frontmatter] "theme"]
 [import [build-prev-next-list] "navigation"]
 
 [defn get-out-path [ctx path]
@@ -20,9 +20,7 @@
 
 [defn load-frontmatter [path name content-frontmatter]
       [when-not [path/content? path] [return #nil]]
-      [def fm [parse-frontmatter [frontmatter [slurp path]]]]
-      [tree/set! fm :href name]
-      [tree/set! fm :depth [- [length [split name "/"]] 1]]
+      [def fm [get-frontmatter path name [frontmatter [slurp path]]]]
       [tree/set! content-frontmatter [string->keyword name] fm]]
 
 [defn build-content [ctx path content-frontmatter build-fun]
