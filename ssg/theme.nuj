@@ -10,13 +10,14 @@
       [return ctx]]
 
 [defn include-resource* [ctx path dest-path]
-  [tree/set! [tree/ref ctx :resources-needed] [string->keyword path] [cons path dest-path]]
-  dest-path]
+      [tree/set! [tree/ref ctx :resources-needed] [string->keyword path] [cons path dest-path]]
+      [return dest-path]]
 
 [defn load-components [ctx]
       :export
-      [import [load-components :as theme/load-components] [tree/ref themes [tree/ref ctx :theme]]]
-      [theme/load-components ctx]
+      [import [init :as theme/init]
+              [tree/ref themes [tree/ref ctx :theme]]]
+      [theme/init ctx]
       ctx]
 
 [defn render [ctx path]
@@ -83,27 +84,29 @@
       [def expr [read fm]]
       [apply tree/new expr]]
 
-[def *cur-page-theme-path* #nil]
+[def *cur-component-path* #nil]
 [def *cur-page-ctx* #nil]
 [def *cur-page-path* #nil]
 [def *cur-page-meta* #nil]
 [defn set-page-ctx! [ctx path meta theme-path]
       [when *cur-page-ctx* [exception "Double set page ctx" ctx]]
-      [set! *cur-page-theme-path* theme-path]
       [set! *cur-page-ctx* ctx]
-      [set! *cur-page-meta* meta]
-      [set! *cur-page-path* path]]
+      [set! *cur-page-path* path]
+      [set! *cur-page-meta* meta]]
 
 [defn reset-page-ctx! []
       [when-not *cur-page-ctx* [exception "Double unset page ctx" #nil]]
       [set! *cur-page-ctx* #nil]
-      [set! *cur-page-meta* #nil]
-      [set! *cur-page-path* #nil]]
+      [set! *cur-page-path* #nil]
+      [set! *cur-page-meta* #nil]]
 
 [defn get-ctx [] *cur-page-ctx*]
 [defn get-path [] *cur-page-path*]
 [defn get-meta [] *cur-page-meta*]
-[defn get-theme-path [] *cur-page-theme-path*]
+
+[defn get-component-path [] [return *cur-component-path*]]
+[defn set-component-path! [new-path]
+      [set! *cur-component-path* new-path]]
 
 [defn get-href* [ctx path target]
       [def name [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]]
@@ -134,7 +137,9 @@
       [navigation/build [get-ctx] depth]]
 
 [defn include-resource [res-path]
-      [include-resource* [get-ctx] [fmt "{}/{res-path}" [get-theme-path]] res-path]
+      [include-resource* [get-ctx]
+                         [fmt "{}/{res-path}" [get-component-path]]
+                         res-path]
       [get-href res-path]]
 
 [defn page-title []
@@ -158,27 +163,43 @@
       [and [this-prev-next]
            [tree/ref [this-prev-next] :next]]]
 
-[defn component [name args]
-      [[tree/ref [tree/ref [get-ctx] :components] name] args]]
+[defn component [name props children]
+      [def component-fun [tree/ref [tree/ref [get-ctx] :components] name]]
+      [when-not component-fun [exception "Can't find a component called: " name]]
+      [component-fun props children]]
 
-[defn add-component [ctx name raw-text]
+[defn template [name props children]
+      [def template-fun [tree/ref [tree/ref [get-ctx] :templates] name]]
+      [when-not template-fun [exception "Can't find a template named: " name]]
+      [template-fun props children]]
+
+[defn add-component [ctx name raw-text component-path]
       :export
-      [tree/set! [tree/ref ctx :components] name [parse-component raw-text]]]
+      [tree/set! [tree/ref ctx :components]
+                 name
+                 [parse-component raw-text component-path]]]
 
-[defn parse-component [raw-text]
+[defn add-template [ctx name raw-text component-path]
+      :export
+      [tree/set! [tree/ref ctx :templates]
+                 name
+                 [parse-component raw-text component-path]]]
+
+[defn parse-component [raw-text component-path]
       :export
       [def theme-parts [cons 'cat [theme/split raw-text]]]
-      [eval `[fn [args] ~theme-parts]]]
+      [eval `[fn [props children]
+                 [def old-component-path [get-component-path]]
+                 [set-component-path! component-path]
+                 [def ret ~theme-parts]
+                 [set-component-path! old-component-path]
+                 [return ret]]]]
 
-[defn parse [+theme-path+ raw-theme-text]
+[defn render [ctx path]
       :export
-      "Parse a theme and return a function that can be called with a ctx and path to apply that theme to some content"
-      [def theme-parts [cons 'cat [theme/split raw-theme-text]]]
-      [def theme-form `[fn [ctx path]
-                           [def page-parts [split-frontmatter [slurp path]]]
-                           [set-page-ctx! ctx path [parse-frontmatter [car page-parts]] +theme-path+]
-                           [def content [parse-content ctx path [cdr page-parts] [get-meta]]]
-                           [def ret ~theme-parts]
-                           [reset-page-ctx!]
-                           [return ret]]]
-      [eval theme-form]]
+      [def page-parts [split-frontmatter [slurp path]]]
+      [set-page-ctx! ctx path [parse-frontmatter [car page-parts]]]
+      [def content [parse-content ctx path [cdr page-parts] [get-meta]]]
+      [def ret [template :main #nil content]]
+      [reset-page-ctx!]
+      [return ret]]

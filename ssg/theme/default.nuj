@@ -1,18 +1,32 @@
-[import [parse :as theme/parse add-component] "../theme"]
+[import [add-component add-template] "../theme"]
 
 [def +theme-path+ [fmt "{}/default" *module-path*]]
-[def main-template [theme/parse +theme-path+ [slurp [fmt "{+theme-path+}/templates/main.html"]]]]
 
-[defn render [ctx path]
-      "Apply the default theme to a particular path"
+[defn load-templates [ctx]
+      "Load all the partials"
       :export
-      [main-template ctx path]]
+      [doseq [comp-file [directory/read-recursive [fmt "{+theme-path+}/templates"]] ctx]
+             [add-template ctx
+                            [-> comp-file
+                                path/basename
+                                path/without-extension
+                                string->keyword]
+                            [slurp comp-file]
+                            [cat [path/dirname comp-file] "/.."]]]]
 
 [defn load-components [ctx]
       "Load all the partials"
       :export
-      [add-component ctx :Header [slurp [fmt "{+theme-path+}/components/Header.html"]]]
-      [add-component ctx :Favicon [slurp [fmt "{+theme-path+}/components/Favicon.html"]]]
-      [add-component ctx :Footer [slurp [fmt "{+theme-path+}/components/Footer.html"]]]
-      [add-component ctx :Logo [slurp [fmt "{+theme-path+}/components/Logo.html"]]]
-      [add-component ctx :PrevNextNav [slurp [fmt "{+theme-path+}/components/PrevNextNav.html"]]]]
+      [doseq [comp-file [directory/read-recursive [fmt "{+theme-path+}/components"]] ctx]
+             [add-component ctx
+                            [-> comp-file
+                                path/basename
+                                path/without-extension
+                                string->keyword]
+                            [slurp comp-file]
+                            [cat [path/dirname comp-file] "/.."]]]]
+
+[defn init [ctx]
+      :export
+      [load-components ctx]
+      [load-templates ctx]]
