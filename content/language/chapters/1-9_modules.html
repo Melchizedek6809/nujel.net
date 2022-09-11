@@ -22,9 +22,11 @@ date: "2022-08-31"
 
 {{ [component :Nujel #nil
 "[import [red] :ansi]
-[println [red \"Test\"]] ; This should be printed in red in most terminal
+[println [red \"Test\"]] ; This should be printed in red in most terminals
+
 [import [blue green] :ansi] ; You can also import multiple symbols at once
 [println [cat [blue \"Te\"] [green \"st\"]]]
+
 [import [yellow :as ansi-yellow] :ansi] ; Renaming is also possible
 [println [ansi-yellow \"Test\"]]"] }}
 

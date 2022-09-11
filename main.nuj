@@ -7,7 +7,6 @@
 [import [get :as context/get] "ssg/context"]
 [import [build :as content/build add-resources] "ssg/content"]
 [import [add-default :as loader/add-default] "ssg/loader"]
-[import [deploy] "ssg/deployment"]
 [import [load-builtin-themes load-components] "ssg/theme"]
 
 [defn main [args]
@@ -20,5 +19,4 @@
           load-builtin-themes
           load-components
           content/build
-          add-resources
-          deploy]]
+          add-resources]]
