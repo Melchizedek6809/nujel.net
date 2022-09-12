@@ -2,11 +2,6 @@
 [import [parse-frontmatter frontmatter get-frontmatter] "theme"]
 [import [build-prev-next-list] "navigation"]
 
-[defn get-out-path [ctx path]
-      :export
-      [cat [tree/ref ctx :deploy-dir]
-           [string/cut path [length [tree/ref ctx :content-root-dir]]]]]
-
 [defn add-resources [ctx]
       :export
       "Copy all resources used over"
@@ -48,4 +43,4 @@
                      [tree/ref ctx :content-root-dir]
                      content-frontmatter
                      loader/build]
-      ctx]
+      [return ctx]]

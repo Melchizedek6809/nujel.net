@@ -1,10 +1,11 @@
 [import [build :as navigation/build] "navigation"]
 
+[def themes @[]]
+
 [defn Nujel [source]
       [import [pp-nujel] :pretty/nujel]
       [pp-nujel source :html]]
 
-[def themes @[]]
 [defn add-theme [name mod]
       [tree/set! themes name [module/load mod [current-closure]]]]
 
@@ -139,8 +140,8 @@
 [defn get-href [target]
       [get-href* [get-ctx] [get-path] target]]
 
-[defn navigation [depth]
-      [navigation/build [get-ctx] depth]]
+[defn navigation [depth prefix]
+      [navigation/build [get-ctx] depth prefix]]
 
 [defn get-posts []
       [def ret #nil]

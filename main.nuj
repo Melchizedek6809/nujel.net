@@ -6,16 +6,13 @@
 [import [rainbow] :ansi]
 [import [get :as context/get] "ssg/context"]
 [import [build :as content/build add-resources] "ssg/content"]
-[import [add-default :as loader/add-default] "ssg/loader"]
 [import [load-builtin-themes load-components] "ssg/theme"]
 
 [defn main [args]
       :export
       [pfmtln "Welcome to the {} SSG" [rainbow "Nujel"]]
       [when [and [car args] [string? [car args]]] [cd [car args]]]
-
       [-> [context/get "./"]
-          loader/add-default
           load-builtin-themes
           load-components
           content/build

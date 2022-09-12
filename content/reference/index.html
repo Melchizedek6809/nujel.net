@@ -1,0 +1,12 @@
++++
+title: "Nujel reference"
+nav-title: "Nujel reference"
+date: "2022-09-13"
++++
+
+<h1>The Nujel reference</h1>
+<p>This is an experiment in generating a usable reference using the builtin reflection abilities, they will be pretty terrible at first, but hopefully will improve over time in quality.</p>
+
+<nav>
+    {{ [join [sort [map [navigation 2 "reference/"] [fn [v] [render-link v]]]] "<br/>"] }}
+</nav>

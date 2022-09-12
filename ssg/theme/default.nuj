@@ -2,31 +2,18 @@
 
 [def +theme-path+ [fmt "{}/default" *module-path*]]
 
-[defn load-templates [ctx]
-      "Load all the partials"
-      :export
-      [doseq [comp-file [directory/read-recursive [fmt "{+theme-path+}/templates"]] ctx]
-             [add-template ctx
-                            [-> comp-file
-                                path/basename
-                                path/without-extension
-                                string->keyword]
-                            [slurp comp-file]
-                            [cat [path/dirname comp-file] "/.."]]]]
-
-[defn load-components [ctx]
-      "Load all the partials"
-      :export
-      [doseq [comp-file [directory/read-recursive [fmt "{+theme-path+}/components"]] ctx]
-             [add-component ctx
-                            [-> comp-file
-                                path/basename
-                                path/without-extension
-                                string->keyword]
-                            [slurp comp-file]
-                            [cat [path/dirname comp-file] "/.."]]]]
+[defn load-part [ctx suffix fun]
+      [doseq [comp-file [directory/read-recursive [fmt "{+theme-path+}/{suffix}"]] ctx]
+             [fun
+              ctx
+              [-> comp-file
+                  path/basename
+                  path/without-extension
+                  string->keyword]
+              [slurp comp-file]
+              [cat [path/dirname comp-file] "/.."]]]]
 
 [defn init [ctx]
       :export
-      [load-components ctx]
-      [load-templates ctx]]
+      [load-part ctx "templates" add-template]
+      [load-part ctx "components" add-component]]

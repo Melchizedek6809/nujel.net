@@ -22,11 +22,14 @@
         [cdr! c]]
       [tree/set! ctx :prev-next-nav nav]]
 
-[defn build [ctx depth]
-  "Build up a navigation and return a list of trees, describing the entries"
-  :export
-  [-> [tree/values [tree/ref ctx :frontmatter]]
-      [filter [fn [a] [== depth [tree/ref a :depth]]]]
-      [filter [fn [a] [not [tree/ref a :hide-in-nav]]]]
-      [list/sort [fn [a b] [< [tree/ref a :href]
-                              [tree/ref b :href]]]]]]
+[defn build [ctx depth prefix]
+      "Build up a navigation and return a list of trees, describing the entries"
+      :export
+      [def l [-> [tree/values [tree/ref ctx :frontmatter]]
+                 [filter [fn [a] [not [tree/ref a :hide-in-nav]]]]]]
+      [when depth
+        [set! l [filter l [fn [a] [== depth [tree/ref a :depth]]]]]]
+      [when prefix
+        [set! l [filter l [fn [a] [== prefix [cut [tree/ref a :href] 0 [buffer/length prefix]]]]]]]
+      [list/sort l [fn [a b] [< [tree/ref a :href]
+                                [tree/ref b :href]]]]]

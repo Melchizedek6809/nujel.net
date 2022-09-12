@@ -1,28 +1,37 @@
-[def loaders @[]]
+[import [render] "theme"]
 
-[defn add-loader [extension handler]
-      "Add a loader for a specific file extension"
-      :export
-      [tree/set! loaders extension handler]]
+[defn get-out-path [ctx path]
+      [cat [tree/ref ctx :deploy-dir]
+           [string/cut path [length [tree/ref ctx :content-root-dir]]]]]
 
-[defn init [ctx]
-      [require "loader/copy"]
-      [require "loader/config"]
-      [require "loader/html-content"]
-      [return ctx]]
+[defn mkdir-safe [full-path]
+      [def parts [split full-path "/"]]
+      [def path #nil]
+      [while parts
+        [set! path [if path
+                       [cat path "/" [car parts]]
+                       [car parts]]]
+        [cdr! parts]
+        [mkdir path]]]
 
-[defn add-default [ctx]
-      "Add the default loaders to the CTX"
-      :export
-      [init ctx]
-      [def ctx-loaders [tree/ref ctx :loaders]]
-      [doseq [ext [tree/keys loaders] ctx]
-             [tree/set! ctx-loaders ext [tree/ref loaders ext]]]]
+[defn build-html [ctx path]
+      "Loader that just copies the file over"
+      [def dest-path [get-out-path ctx path]]
+      [mkdir-safe [path/dirname dest-path]]
+      [spit dest-path [render ctx path]]
+      [return dest-path]]
+
+[defn build-copy [ctx path]
+      "Loader that just copies the file over"
+      [def dest-path [get-out-path ctx path]]
+      [mkdir-safe [path/dirname dest-path]]
+      [file/copy path dest-path]
+      dest-path]
 
 [defn build [ctx path]
       "Build a certain path using the loader"
       :export
-      [def ctx-loaders [tree/ref ctx :loaders]]
       [def ext [string->keyword [lowercase [path/extension path]]]]
-      [[or [tree/ref ctx-loaders ext]
-           [tree/ref ctx-loaders :otherwise]] ctx path]]
+      [if [== ext :html]
+          [build-html ctx path]
+          [build-copy ctx path]]]
