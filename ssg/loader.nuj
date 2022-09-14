@@ -1,10 +1,12 @@
-[import [render] "theme"]
+[import [render split-frontmatter get-frontmatter] "theme"]
 
 [defn get-out-path [ctx path]
+      :export
       [cat [tree/ref ctx :deploy-dir]
            [string/cut path [length [tree/ref ctx :content-root-dir]]]]]
 
 [defn mkdir-safe [full-path]
+      :export
       [def parts [split full-path "/"]]
       [def path #nil]
       [while parts
@@ -15,10 +17,15 @@
         [mkdir path]]]
 
 [defn build-html [ctx path]
-      "Loader that just copies the file over"
+      "Loader that renders a HTML template"
+      :export
       [def dest-path [get-out-path ctx path]]
       [mkdir-safe [path/dirname dest-path]]
-      [spit dest-path [render ctx path]]
+      [def page-parts [split-frontmatter [slurp path]]]
+      [def meta [get-frontmatter path
+                                 [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
+                                 [car page-parts]]]
+      [spit dest-path [render ctx path meta [cdr page-parts]]]
       [return dest-path]]
 
 [defn build-copy [ctx path]

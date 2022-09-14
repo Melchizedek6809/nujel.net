@@ -374,3 +374,96 @@ h6 a{
 .nujel-hl-13 {color:#7e0097;}
 .nujel-hl-14 {color:#56b6c2;}
 .nujel-hl-15 {color:#d7dae0; font-weight: bold;}
+
+.signature {
+	display: inline-block;
+	font-size: 1.4rem;
+}
+.signature::before {
+	content:"[";
+	color:#d7dae0;
+}
+.signature::after {
+	content:"]";
+	color:#d7dae0;
+}
+
+.signature h1 {
+	display: inline;
+	padding: 0;
+	margin: 0;
+	font-size: inherit;
+	font-weight: normal;
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.signature > .argument {
+	display:inline;
+	padding:0;
+	margin:0;
+	font-size:1.4rem;
+}
+.signature > .argument.rest-argument::before {
+	content:' . ';
+	color:#d7dae0;
+}
+
+.signature > .argument[arg-i="1"] {color:#56b6c2;}
+.signature > .argument[arg-i="2"] {color:#98c379;}
+.signature > .argument[arg-i="3"] {color:#d5b06b;}
+.signature > .argument[arg-i="4"] {color:#e06c75;}
+.signature > .argument[arg-i="5"] {color:#c678dd;}
+.signature > .argument[arg-i="6"] {color:#528bff;}
+
+.docstring-intro {
+	margin-bottom:2em;
+}
+
+.docstring-desc {
+	margin-bottom: 1em;
+}
+
+.docstring-arg-name {
+	display: block;
+}
+.docstring-arg-desc {
+	display: inline-block;
+	padding-left:1em;
+}
+.docstring-arg {
+	margin-bottom: 1em;
+}
+.docstring-arg:last-child {
+	margin-bottom: 0;
+}
+
+.docstring-return-val,
+.docstring-args-wrap {
+	margin-bottom: 2em;
+}
+
+.docstring-arg[arg-i="1"] .docstring-arg-name {color:#56b6c2;}
+.docstring-arg[arg-i="2"] .docstring-arg-name {color:#98c379;}
+.docstring-arg[arg-i="3"] .docstring-arg-name {color:#d5b06b;}
+.docstring-arg[arg-i="4"] .docstring-arg-name {color:#e06c75;}
+.docstring-arg[arg-i="5"] .docstring-arg-name {color:#c678dd;}
+.docstring-arg[arg-i="6"] .docstring-arg-name {color:#528bff;}
+
+.arg-ref[arg-i="1"] {color:#56b6c2;}
+.arg-ref[arg-i="2"] {color:#98c379;}
+.arg-ref[arg-i="3"] {color:#d5b06b;}
+.arg-ref[arg-i="4"] {color:#e06c75;}
+.arg-ref[arg-i="5"] {color:#c678dd;}
+.arg-ref[arg-i="6"] {color:#528bff;}
+
+p {
+	margin: 0 0 1em 0;
+	font-size: 1rem;
+	line-height: 1.35em;
+}
+
+h4 {
+	color: #8f949e;
+	font-size: 1.4rem;
+	margin-bottom: 0.25em;
+}

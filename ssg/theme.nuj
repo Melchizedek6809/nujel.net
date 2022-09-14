@@ -115,13 +115,23 @@
 [defn set-component-path! [new-path]
       [set! *cur-component-path* new-path]]
 
+[defn urlescape [in]
+      [with-string-port out
+                        [dotimes [i [buffer/length in]]
+                          [def c [buffer/ref in i]]
+                          [case c
+                                [#\# [out 'block-write "%23"]]
+                                [#\& [out 'block-write "%26"]]
+                                [#\? [out 'block-write "%3F"]]
+                                [otherwise [out 'char-write c]]]]]]
+
 [defn get-href* [ctx path target]
       [def name [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]]
       [def depth [- [length [split name "/"]] 1]]
       [def href [if [tree? target]
                     [tree/ref target :href]
                     target]]
-      [dotimes [i depth href]
+      [dotimes [i depth [urlescape href]]
         [set! href [cat "../" href]]]]
 
 [defn render-link* [ctx path target]
@@ -140,8 +150,8 @@
 [defn get-href [target]
       [get-href* [get-ctx] [get-path] target]]
 
-[defn navigation [depth prefix]
-      [navigation/build [get-ctx] depth prefix]]
+[defn navigation [depth prefix category]
+      [navigation/build [get-ctx] depth prefix category]]
 
 [defn get-posts []
       [def ret #nil]
@@ -208,14 +218,10 @@
                  [set-component-path! old-component-path]
                  [return ret]]]]
 
-[defn render [ctx path]
+[defn render [ctx path meta raw-content]
       :export
-      [def page-parts [split-frontmatter [slurp path]]]
-      [def meta [get-frontmatter path
-                                 [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
-                                 [car page-parts]]]
       [set-page-ctx! ctx path meta]
-      [def content [parse-content ctx path [cdr page-parts] meta]]
+      [def content [parse-content ctx path raw-content meta]]
       [def ret [template [tree/ref [get-meta] :type] meta content]]
       [reset-page-ctx!]
       [return ret]]

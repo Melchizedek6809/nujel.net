@@ -4,16 +4,21 @@
 ;;; Most functionality is separated into modules that can be found under /ssg/
 
 [import [rainbow] :ansi]
-[import [get :as context/get] "ssg/context"]
-[import [build :as content/build add-resources] "ssg/content"]
+[import [get :as context-get] "ssg/context"]
+[import [build-ctx build-queued generate-content build-frontmatter-index add-resources] "ssg/content"]
 [import [load-builtin-themes load-components] "ssg/theme"]
+[import [build-prev-next-list] "ssg/navigation"]
 
 [defn main [args]
       :export
       [pfmtln "Welcome to the {} SSG" [rainbow "Nujel"]]
       [when [and [car args] [string? [car args]]] [cd [car args]]]
-      [-> [context/get "./"]
+      [-> [context-get "./"]
           load-builtin-themes
           load-components
-          content/build
+          build-frontmatter-index
+          generate-content
+          build-prev-next-list
+          build-ctx
+          build-queued
           add-resources]]

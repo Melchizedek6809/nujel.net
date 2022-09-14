@@ -1,0 +1,4 @@
+<h2>{{ [def cur-cat [tree/ref props :category]] [keyword->string cur-cat] }}</h2>
+<nav>
+{{ [join [sort [map [navigation #nil #nil cur-cat] [fn [v] [render-link v]]]] "<br/>"] }}
+</nav>
