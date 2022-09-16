@@ -66,8 +66,8 @@
       [when examples
         [cat "<h4>Examples</h4><pre class=\"docstring-examples source source-nujel\">"
              [-> examples
-                 [map [fn [e] [pp-nujel [fmt "{:?}\n{:?}\n\n" [cadr e] [car e]] :html]]]
-                 [join ""]]
+                 [map [fn [e] [pp-nujel [fmt "{:?}\n{:?}\n" [cadr e] [car e]] :html]]]
+                 [join "\n"]]
              "</pre>"]]]
 
 [defn closure-html-related [f]
@@ -79,9 +79,14 @@
                  [join ""]]
              "</div>"]]]
 
+[defn closure-html-internal [f]
+      [when [meta f :internal]
+        "{{ [component :InternalWarning] }}"]]
+
 [defn generate-reference-for [f]
       [cat [closure-signature f]
            "<br/><br/>"
+           [closure-html-internal f]
            [closure-html-documentation f]
            [closure-html-examples f]
            [closure-html-related f]]]

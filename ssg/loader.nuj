@@ -38,7 +38,7 @@
 [defn build [ctx path]
       "Build a certain path using the loader"
       :export
-      [def ext [string->keyword [lowercase [path/extension path]]]]
+      [def ext [string->keyword [lower-case [path/extension path]]]]
       [if [== ext :html]
           [build-html ctx path]
           [build-copy ctx path]]]

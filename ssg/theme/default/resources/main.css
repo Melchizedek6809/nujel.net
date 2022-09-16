@@ -467,3 +467,16 @@ h4 {
 	font-size: 1.4rem;
 	margin-bottom: 0.25em;
 }
+
+.category-navigation > nav {
+	display: block;
+	column-count: 5;
+	margin-bottom: 2rem;
+}
+
+@media (max-width: 780px) {
+	.category-navigation > nav {
+		display: block;
+		column-count: 3;
+	}
+}

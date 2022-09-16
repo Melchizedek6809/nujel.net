@@ -10,7 +10,7 @@
              [file/copy [car res] [fmt "{deploy-dir}/{}" [cdr res]]]]]
 
 [defn path/content? [path]
-      [= [lowercase [path/extension path]] "html"]]
+      [= [lower-case [path/extension path]] "html"]]
 
 [defn load-frontmatter [path name content-frontmatter]
       [when-not [path/content? path] [return #nil]]
