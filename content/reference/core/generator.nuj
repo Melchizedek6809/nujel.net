@@ -94,8 +94,10 @@
 [defn generate-content-for [f]
       [def filename [fmt "{}.html" [closure/name f]]]
       [when [= filename ".html"] [return #nil]]
+      [def tags #nil]
+      [when [meta f :internal] [cons! :internal tags]]
       [queue-content filename
-                     @[:type :page :title [closure/name f] :category [closure/cat f]]
+                     @[:type :page :title [closure/name f] :category [closure/cat f] :tags tags]
                      [fn [] [generate-reference-for f]]]]
 
 [-> [symbol-table]

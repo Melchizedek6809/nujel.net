@@ -137,8 +137,12 @@
 [defn render-link* [ctx path target]
       [if [string? target]
           [render-link* ctx path [tree/ref [tree/ref ctx :frontmatter] [string->keyword target]]]
-          [fmt "<a href=\"{}\">{}</a>"
+          [fmt "<a href=\"{}\" class=\"{}\">{}</a>"
                [get-href* ctx path target]
+               [do [def classes #nil]
+                   [def tags [and [tree? target] [tree/ref target :tags]]]
+                   [doseq [tag tags] [cons! [cat "tag-" [keyword->string tag]] classes]]
+                   [join classes " "]]
                [if [tree? target]
                    [or [tree/ref target :nav-title]
                        [tree/ref target :title]]

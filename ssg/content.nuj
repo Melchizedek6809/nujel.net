@@ -50,7 +50,8 @@
 
 
 [defn build-frontmatter-index [ctx]
-      "Load all the frontmatters and look generate datastructures necessary for building navigations"
+      "Load all the frontmatters and look generate datastructures necessary for"
+      "building navigations"
       :export
       [def content-frontmatter @[]]
       [build-content ctx
