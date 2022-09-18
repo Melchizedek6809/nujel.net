@@ -12,13 +12,13 @@ date: "2022-08-31"
 <p>Quote can not only be used to inhibit the implicit behaviour of symbol resolution, but can also stop expressions from being evaluated and instead being passed along as simple lists. This allows for the easy inclusion of literal lists.</p>
 {{ [component :Nujel #nil
 "'a ; You can quote symbols
-; => a
+a
 
 '[1 2 3] ; Or forms, making them plain lists
-; => [1 2 3]
+[1 2 3]
 
 '(1 2 3) ; With parentheses or brackets
-; => [1 2 3]"] }}
+[1 2 3]"] }}
 
 <h3>2. Quasiquote</h3>
 <p>What is one supposed to do if one wants to quote only parts of an expression though? You could build it up using <code>cons</code>,<code>list</code> and quote but there is a more convenient way for that: <code>quasiquote</code>.</p>
@@ -29,10 +29,10 @@ date: "2022-08-31"
 </box-wrap>
 {{ [component :Nujel #nil
 "`[1 2 ~[+ 1 1 1]] ; To unquote you can use a tilde
-; => [1 2 3]
+[1 2 3]
 
 `[1 ~@[list 2 3]] ; And ~@ for unquote-splicing
-; => [1 2 3]"] }}
+[1 2 3]"] }}
 <box-wrap box-color="yellow">
     <h3>Implementation detail</h3>
     <p>Unlike in other Lisp/Scheme implementations Quasiquote is just a regular macro, this shouldn't make a difference in most cases but might trip you up if you delve deeper into the runtime.</p>

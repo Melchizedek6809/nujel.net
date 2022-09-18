@@ -16,25 +16,25 @@ date: "2022-08-31"
 
 {{ [component :Nujel #nil
 "[+ 1 2 3 4] ; You can add as many numbers as you want
-; => 10
+10
 
 [+ 1 2 [+ 3 4]]
-; => 10
+10
 
 [+ [+ 1 2] [+ 3 4]]
-; => 10
+10
 
 [+ 1 -2] ; You can also use negative numbers in additions
-; => -1
+-1
 
 [+ 1 [- 2]] ; - can also be used to negate numbers
-; => -1
+-1
 
 [+ 1 [- [+ 1 1]]] ; Results of a calculation can also be negated
-; => -1
+-1
 
 [+ 1 \"drei\"] ; You can only calculate with numbers
-; => :type-error"] }}
+:type-error"] }}
 
 <h3>2. Exceptions</h3>
 <p>Dividing through zero generates an exception, which is probably not that suprising, this however also extends to floating point operations where NaN as well as +/-Inf are invalid values that Nujel will not create, instead raising an Exception.</p>
@@ -46,10 +46,10 @@ date: "2022-08-31"
 
 {{ [component :Nujel #nil
 "[/ 10 0]
-; => :float-inf
+:float-inf
 
 [div/int 10 0]
-; => :divide-by-zero"] }}
+:divide-by-zero"] }}
 
 <h3>3. Conversion</h3>
 <p>Nujel also provides a couple of functions for converting between the different numeric formats.</p>
@@ -57,8 +57,8 @@ date: "2022-08-31"
 <p>It will however implicitly convert fixnum's to flownum's whenever that seems to be the least suprising choice.</p>
 {{ [component :Nujel #nil
 "[int 1.1]
-; => 1
+1
 
 [float 1]
-; => 1.0"] }}
+1.0"] }}
 </pre>

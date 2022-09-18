@@ -18,13 +18,13 @@ date: "2022-09-07"
 ; => :unbound-variable
 
 'asd ; By quoting a symbol this implicit look up can be disabled
-; => asd
+asd
 
 [string->symbol \"asd\"] ; You can also turn any old string into a symbol, this is sometimes called interning a string
-; => asd
+asd
 
 [== 'asd [string->symbol \"asd\"]] ; The two values actually point to the same underlying data structure
-; => #t"] }}
+#t"] }}
 
 <box-wrap box-color="yellow">
     <h3>Implementation detail</h3>
@@ -36,16 +36,16 @@ date: "2022-09-07"
 <p>By pre- or suffixing a symbol with a <code>:</code> the reader will return a keywords.</p>
 {{ [component :Nujel #nil
 ":asd ; A keyword
-; => :asd
+:asd
     
 asd: ; Another keyword
-; => asd:
+asd:
     
 [= asd: :asd] ; It doesn't matter where we put the colon
-; => #t
+#t
     
 [= :asd [symbol->keyword 'asd]]
-; => #t"] }}
+#t"] }}
 
 <h3>3. Usage</h3>
 <p>Regarding their usage, keywords should be used when the keyword itself has a useful meaning, symbols should be used to label other values which could work just as well with another symbol associated.</p>

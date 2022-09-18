@@ -22,6 +22,6 @@ date: "2022-09-13"
     [-> [symbol-table]
         [map resolve]
         [for-each [fn [a] [tree/set! cats [closure/cat a] #t]]]]
-    [join [map [tree/keys cats] [fn [a] [component :CategoryNavigation @[:category a]]]] ""]
+    [join [map [sort [tree/keys cats] [fn [a b] [< [string a] [string b]]]] [fn [a] [component :CategoryNavigation @[:category a]]]] ""]
 }}
 </div>

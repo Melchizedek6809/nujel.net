@@ -42,6 +42,7 @@ date: "2022-08-31"
 [defn test []
       :export  ; The easiest way to export is to decorate your [defn] forms with the :export keyword, it will export the function with the name specified
       [println \"Test has been called!\"]]
+
 [defn test-2 []
       :export-as test-zwei  ; You can also use the :export-zwei decorator if you want different internal and external names
       [println \"Test has been called!\"]]
