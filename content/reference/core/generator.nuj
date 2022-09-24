@@ -101,6 +101,6 @@
                      [fn [] [generate-reference-for f]]]]
 
 [-> [symbol-table]
-    [map resolve]
+    [map resolve-or-nil]
     [filter callable?]
     [for-each generate-content-for]]

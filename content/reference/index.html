@@ -20,8 +20,8 @@ date: "2022-09-13"
 {{
     [def cats @[]]
     [-> [symbol-table]
-        [map resolve]
+        [map resolve-or-nil]
         [for-each [fn [a] [tree/set! cats [closure/cat a] #t]]]]
-    [join [map [sort [tree/keys cats] [fn [a b] [< [string a] [string b]]]] [fn [a] [component :CategoryNavigation @[:category a]]]] ""]
+    [join [map [sort [tree/keys cats][fn [a b] [< [string a] [string b]]]] [fn [a] [component :CategoryNavigation @[:category a]]]] ""]
 }}
 </div>
