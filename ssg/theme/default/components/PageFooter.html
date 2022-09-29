@@ -10,3 +10,9 @@
             [cat "Last modified " [tree/ref [get-meta] :modified-date]]]
     }}
 </div>
+<div>
+  {{ [or [tree/ref [get-ctx] :imprint] ""] }}
+</div>
+<div>
+  {{ [or [tree/ref [get-ctx] :contact] ""] }}
+</div>
