@@ -83,12 +83,24 @@
       (when (meta f :internal)
         "{{ (component :InternalWarning) }}"))
 
+(defn closure-html-bytecode (f)
+      (try (fn (err)
+               (fmt "<box-wrap box-color=red><h3>Error</h3><p>Couldn't disassemble {}</p></box-wrap>" (closure/name f)))
+      (def T (type-of f))
+      (when (or (= T :lambda) (= T :macro))
+        (def disassembly (disassemble f))
+        (when disassembly
+          (cat "<h4>Bytecode</h4><p>Probably only interesting to you if you want to understand more about the Nujel VM or care very much about performance.</p><pre class=\"docstring-bytecode source source-nujel\">"
+               (pp-nujel disassembly :html)
+               "</pre>")))))
+
 (defn generate-reference-for (f)
       (cat (closure-signature f)
            "<br/><br/>"
            (closure-html-internal f)
            (closure-html-documentation f)
            (closure-html-examples f)
+           (closure-html-bytecode f)
            (closure-html-related f)))
 
 (defn generate-content-for (f)

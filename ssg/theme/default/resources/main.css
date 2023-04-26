@@ -7,6 +7,22 @@ body {
 	margin: 0;
 }
 
+h1 {
+        font-size: 3.2rem;
+}
+
+h2 {
+        font-size: 2,4rem;
+}
+
+h3 {
+        font-size: 1.6rem;
+}
+
+h4 {
+        font-size: 1.2rem;
+}
+
 h1,h2,h3,h4,h5,h6 {
 	margin: 0 0 0.5em 0;
 }
@@ -38,6 +54,7 @@ pre {
 	color: #333;
 	padding: .75em .5em;
 	font-family: 'Courier New', Courier, monospace;
+	border-radius: 2px;
 }
 
 nav.top-chapter-nav {
@@ -190,7 +207,7 @@ box-wrap {
 	box-sizing:border-box;
 	display: block;
 	margin-bottom:0.6rem;
-	border-radius: 0 0 1rem 0;
+	border-radius: 2px;
 }
 
 box-wrap[box-color="red"] {
@@ -330,6 +347,7 @@ body[page-type="post"] > main {
 	border: solid 1px #581;
 	background-color: #5814;
 	border-top-width: 8px;
+	border-radius: 2px;;
 }
 
 .post-snippet::after {
@@ -351,7 +369,7 @@ h6 a{
 	margin-left: 0;
 	display: block;
 	padding: 0.6rem;
-	border-radius:0;
+	border-radius: 2px;
 	border: none;
 	color: #d7dae0;
 	background-color: #000;
