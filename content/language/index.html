@@ -17,5 +17,5 @@ Most functions/macros borrow their name directly from <i>Clojure</i> or <i>Commo
 
 <h2>Chapters</h2>
 <nav>{{
-  [join [sort [map [navigation #nil "language/chapters"] [fn [v] [render-link v]]]] "<br/>"]
+  (join (sort (map (navigation #nil "language/chapters") (fn (v) (render-link v)))) "<br/>")
 }}</nav>

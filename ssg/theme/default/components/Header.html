@@ -1,4 +1,4 @@
 <nav class="top-nav">
-  {{ [component :Logo] }}
-  {{ [join [sort [map [navigation 0] [fn [v] [render-link v]]]] ""] }}
+  {{ (component :Logo) }}
+  {{ (join (sort (map (navigation 0) (fn (v) (render-link v)))) "") }}
 </nav>

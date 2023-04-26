@@ -14,27 +14,27 @@ date: "2022-08-31"
 <p>Nujel supports most standard operators for integers as well as floating-point numbers (or fixnums and flonums). There is no operation called mod/modulo, but instead it is called <code>rem</code>, just like in <i>Clojure</i>.</p>
 <p>Division will also always return a flonum, if you want to do an integer division you can use <code>div/int</code> instead. Apart from that doing operations between fixnums and flonums will result in a flonum, with fixnums only being returned when both operands are fixnums.</p>
 
-{{ [component :Nujel #nil
-"[+ 1 2 3 4] ; You can add as many numbers as you want
+{{ (component :Nujel #nil
+"(+ 1 2 3 4) ; You can add as many numbers as you want
 10
 
-[+ 1 2 [+ 3 4]]
+(+ 1 2 (+ 3 4))
 10
 
-[+ [+ 1 2] [+ 3 4]]
+(+ (+ 1 2) (+ 3 4))
 10
 
-[+ 1 -2] ; You can also use negative numbers in additions
+(+ 1 -2) ; You can also use negative numbers in additions
 -1
 
-[+ 1 [- 2]] ; - can also be used to negate numbers
+(+ 1 (- 2)) ; - can also be used to negate numbers
 -1
 
-[+ 1 [- [+ 1 1]]] ; Results of a calculation can also be negated
+(+ 1 (- (+ 1 1))) ; Results of a calculation can also be negated
 -1
 
-[+ 1 \"drei\"] ; You can only calculate with numbers
-:type-error"] }}
+(+ 1 \"drei\") ; You can only calculate with numbers
+:type-error") }}
 
 <h3>2. Exceptions</h3>
 <p>Dividing through zero generates an exception, which is probably not that suprising, this however also extends to floating point operations where NaN as well as +/-Inf are invalid values that Nujel will not create, instead raising an Exception.</p>
@@ -44,21 +44,21 @@ date: "2022-08-31"
     <p>This seems to be an inconsitency in how integers and floating-point numbers are handled, since I can't think of time where I wanted a NaN/Inf value it seems reasonable to me to handle this case just like integers, meaning raising an exception.</p>
 </box-wrap>
 
-{{ [component :Nujel #nil
-"[/ 10 0]
+{{ (component :Nujel #nil
+"(/ 10 0)
 :float-inf
 
-[div/int 10 0]
-:divide-by-zero"] }}
+(div/int 10 0)
+:divide-by-zero") }}
 
 <h3>3. Conversion</h3>
 <p>Nujel also provides a couple of functions for converting between the different numeric formats.</p>
 <p>In general, Nujel will never implicitly convert a flonum to a fixnum, since that might mean loosing precision, if it does it is considered a bug in the implementation.</p>
 <p>It will however implicitly convert fixnum's to flownum's whenever that seems to be the least suprising choice.</p>
-{{ [component :Nujel #nil
-"[int 1.1]
+{{ (component :Nujel #nil
+"(int 1.1)
 1
 
-[float 1]
-1.0"] }}
+(float 1)
+1.0") }}
 </pre>

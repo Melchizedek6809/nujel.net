@@ -20,15 +20,15 @@ date: "2022-08-31"
 <h3>1. Importing from built-in modules</h3>
 <p>Let's start with some simple example on how to import a function from a builtin stdlib module:</p>
 
-{{ [component :Nujel #nil
-"[import [red] :ansi]
-[println [red \"Test\"]] ; This should be printed in red in most terminals
+{{ (component :Nujel #nil
+"(import (red) :ansi)
+(println (red \"Test\")) ; This should be printed in red in most terminals
 
-[import [blue green] :ansi] ; You can also import multiple symbols at once
-[println [cat [blue \"Te\"] [green \"st\"]]]
+(import (blue green) :ansi) ; You can also import multiple symbols at once
+(println (cat (blue \"Te\") (green \"st\")))
 
-[import [yellow :as ansi-yellow] :ansi] ; Renaming is also possible
-[println [ansi-yellow \"Test\"]]"] }}
+(import (yellow :as ansi-yellow) :ansi) ; Renaming is also possible
+(println (ansi-yellow \"Test\"))") }}
 
 <box-wrap box-color="yellow">
     <h3>Expected changes</h3>
@@ -37,33 +37,33 @@ date: "2022-08-31"
 
 <h3>2. Writing your own modules</h3>
 <p>You don't need to do anything special, every Nujel source file can be treated as a module. When it is imported for the first time all top-level code will be executed and all values marked for :export will be added to a map. The name is also determined by the path in the filesystem.</p>
-{{ [component :Nujel #nil
+{{ (component :Nujel #nil
 "; test.nuj
-[defn test []
-      :export  ; The easiest way to export is to decorate your [defn] forms with the :export keyword, it will export the function with the name specified
-      [println \"Test has been called!\"]]
+(defn test ()
+      :export  ; The easiest way to export is to decorate your (defn) forms with the :export keyword, it will export the function with the name specified
+      (println \"Test has been called!\"))
 
-[defn test-2 []
+(defn test-2 ()
       :export-as test-zwei  ; You can also use the :export-zwei decorator if you want different internal and external names
-      [println \"Test has been called!\"]]
+      (println \"Test has been called!\"))
 
-[def internal-value 123]
-[export exported-value internal-value] ; Exporting arbitrary values is best done with the [export] macro, it has pretty much the same form as [def]"] }}
+(def internal-value 123)
+(export exported-value internal-value) ; Exporting arbitrary values is best done with the (export) macro, it has pretty much the same form as (def)") }}
 
 <h3>3. Importing your own modules</h3>
 <p>To import modules from the filesystem, mainly ones you wrote yourself, you need to specify a relative path to the file, without the .nuj ending.</p>
-{{ [component :Nujel #nil
+{{ (component :Nujel #nil
 "; test.nuj
-[defn test []
+(defn test ()
       :export
-      [println \"Test has been called!\"]]
+      (println \"Test has been called!\"))
 
 ; main.nuj
-[import [test] \"./test\"]
-[test] ; => \"Test has been called!\""] }}
+(import (test) \"./test\")
+(test) ; => \"Test has been called!\"") }}
 
 <h3>4. Executing modules</h3>
-<p>One uncommon feature of the Nujel module system might be that there is no big distinction between executables and libraries, executable modules just have to export a [main] function which then might be called with the commandline arguments.</p>
+<p>One uncommon feature of the Nujel module system might be that there is no big distinction between executables and libraries, executable modules just have to export a (main) function which then might be called with the commandline arguments.</p>
 <p>This enables the runtime to bundle multiple executable modules within the main executable, for example right now the REPL, Help screen and C Asset Code generator are all executable modules contained in the default stdlib.</p>
 <p>Nujel defaults to executing the REPL module, but you can change that by for example specifying <code>nujel -m :games/guess</code> which should start a very simple guess the number game.</p>
 

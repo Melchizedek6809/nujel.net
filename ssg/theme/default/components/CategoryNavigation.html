@@ -1,10 +1,10 @@
 <div class="category-navigation">
 	<h2>{{
-		[def cur-cat [tree/ref props :category]]
-		[def items [navigation #nil #nil cur-cat]]
-		[fmt "{} ({})" [capitalize [keyword->string cur-cat]] [length items]]
+		(def cur-cat (tree/ref props :category))
+		(def items (navigation #nil #nil cur-cat))
+		(fmt "{} ({})" (capitalize (keyword->string cur-cat)) (length items))
 	}}</h2>
 	<nav>
-		{{ [join [sort [map items [fn [v] [render-link v]]]] "<br/>"] }}
+		{{ (join (sort (map items (fn (v) (render-link v)))) "<br/>") }}
 	</nav>
 </div>

@@ -1,44 +1,44 @@
-[import [render split-frontmatter get-frontmatter] "theme"]
+(import (render split-frontmatter get-frontmatter) "theme")
 
-[defn get-out-path [ctx path]
+(defn get-out-path (ctx path)
       :export
-      [cat [tree/ref ctx :deploy-dir]
-           [string/cut path [length [tree/ref ctx :content-root-dir]]]]]
+      (cat (tree/ref ctx :deploy-dir)
+           (string/cut path (length (tree/ref ctx :content-root-dir)))))
 
-[defn mkdir-safe [full-path]
+(defn mkdir-safe (full-path)
       :export
-      [def parts [split full-path "/"]]
-      [def path #nil]
-      [while parts
-        [set! path [if path
-                       [cat path "/" [car parts]]
-                       [car parts]]]
-        [cdr! parts]
-        [mkdir path]]]
+      (def parts (split full-path "/"))
+      (def path #nil)
+      (while parts
+        (set! path (if path
+                       (cat path "/" (car parts))
+                       (car parts)))
+        (cdr! parts)
+        (mkdir path)))
 
-[defn build-html [ctx path]
+(defn build-html (ctx path)
       "Loader that renders a HTML template"
       :export
-      [def dest-path [get-out-path ctx path]]
-      [mkdir-safe [path/dirname dest-path]]
-      [def page-parts [split-frontmatter [slurp path]]]
-      [def meta [get-frontmatter path
-                                 [string/cut path [inc [length [tree/ref ctx :content-root-dir]]]]
-                                 [car page-parts]]]
-      [spit dest-path [render ctx path meta [cdr page-parts]]]
-      [return dest-path]]
+      (def dest-path (get-out-path ctx path))
+      (mkdir-safe (path/dirname dest-path))
+      (def page-parts (split-frontmatter (slurp path)))
+      (def meta (get-frontmatter path
+                                 (string/cut path (inc (length (tree/ref ctx :content-root-dir))))
+                                 (car page-parts)))
+      (spit dest-path (render ctx path meta (cdr page-parts)))
+      (return dest-path))
 
-[defn build-copy [ctx path]
+(defn build-copy (ctx path)
       "Loader that just copies the file over"
-      [def dest-path [get-out-path ctx path]]
-      [mkdir-safe [path/dirname dest-path]]
-      [file/copy path dest-path]
-      dest-path]
+      (def dest-path (get-out-path ctx path))
+      (mkdir-safe (path/dirname dest-path))
+      (file/copy path dest-path)
+      dest-path)
 
-[defn build [ctx path]
+(defn build (ctx path)
       "Build a certain path using the loader"
       :export
-      [def ext [string->keyword [lower-case [path/extension path]]]]
-      [if [== ext :html]
-          [build-html ctx path]
-          [build-copy ctx path]]]
+      (def ext (string->keyword (lower-case (path/extension path))))
+      (if (== ext :html)
+          (build-html ctx path)
+          (build-copy ctx path)))

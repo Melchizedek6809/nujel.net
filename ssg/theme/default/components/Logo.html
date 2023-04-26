@@ -1,4 +1,7 @@
 {{
-[when [tree/ref [get-ctx] :logo]
-      [fmt "<a class=\"logo-link\" href=\"{}\"><img src=\"{}\"/><span>{}</span></a>" [get-href "index.html"] [get-href [tree/ref [get-ctx] :logo]] [tree/ref [get-ctx] :logo-text]]]
+(when (tree/ref (get-ctx) :logo)
+      (fmt "<a class=\"logo-link\" href=\"{}\"><img src=\"{}\"/><span>{}</span></a>"
+      (get-href "index.html")
+      (get-href (tree/ref (get-ctx) :logo))
+      (tree/ref (get-ctx) :logo-text)))
 }}

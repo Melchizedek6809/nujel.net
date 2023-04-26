@@ -1,3 +1,3 @@
 {{
-    [join [map [get-posts] [fn [p] [component :PostSnippet p #nil]]] ""]
+    (join (map (get-posts) (fn (p) (component :PostSnippet p #nil))) "")
 }}

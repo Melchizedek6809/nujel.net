@@ -1,15 +1,15 @@
-[defn get [path]
+(defn get (path)
       "Return the context for a SSG project, located at PATH"
       :export
-      @[ :path path
-         :title "Some site"
-         :content-root-dir "content"
-         :deploy-dir "deploy"
+      { :path path
+        :title "Some site"
+        :content-root-dir "content"
+        :deploy-dir "deploy"
 
-         :theme :default
+        :theme :default
 
-         :components @[]
-         :templates @[]
+        :components {}
+        :templates {}
 
-         :resources-needed @[]
-         :generator-queue @[]]]
+        :resources-needed {}
+        :generator-queue {}})

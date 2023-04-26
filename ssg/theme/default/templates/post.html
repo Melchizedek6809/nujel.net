@@ -1,25 +1,25 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>{{ [page-title] }}</title>
+    <title>{{ (page-title) }}</title>
     <meta http-equiv="content-type" content="text/html;" charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ [include-resource "resources/main.css"] }}"/>
-    {{ [component :Favicon] }}
+    <link rel="stylesheet" href="{{ (include-resource "resources/main.css") }}"/>
+    {{ (component :Favicon) }}
   </head>
-  <body page-type="{{ [keyword->string [or [tree/ref props :type] :post]] }}">
+  <body page-type="{{ (keyword->string (or (tree/ref props :type) :post)) }}">
     <header>
-      {{ [component :Header] }}
+      {{ (component :Header) }}
     </header>
     <main>
-      <h4 class="post-date">{{ [tree/ref props :date] }}</h4>
-      {{ [when [tree/ref props :author]
-               [cat "<h4 class=\"byline\">by " [tree/ref props :author] "</h4>"]] }}
-      <h1>{{ [tree/ref props :title] }}</h1>
+      <h4 class="post-date">{{ (tree/ref props :date) }}</h4>
+      {{ (when (tree/ref props :author)
+               (cat "<h4 class=\"byline\">by " (tree/ref props :author) "</h4>")) }}
+      <h1>{{ (tree/ref props :title) }}</h1>
       {{ children }}
     </main>
     <footer>
-      {{ [component :Footer] }}
+      {{ (component :Footer) }}
     </footer>
   </body>
 </html>

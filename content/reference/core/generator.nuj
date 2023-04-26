@@ -1,106 +1,106 @@
-[import [pp-nujel] :pretty/nujel]
+(import (pp-nujel) :pretty/nujel)
 
-[defn closure-signature [f]
-      [def args ""]
-      [def arg-i 0]
-      [def arguments [closure/arguments f]]
-      [while arguments
-        [if [pair? arguments]
-            [when [car arguments] [set! args [fmt "{args} <span class=\"argument\" arg-i=\"{}\">{}</span>" [inc! arg-i] [car arguments]]]]
-            [set! args [fmt "{args} <span class=\"argument rest-argument\" arg-i=\"{}\">{}</span>" [inc! arg-i] arguments]]]
-        [cdr! arguments]]
-      [fmt "<div class=\"signature\"><h1>{}</h1>{}</div>" [closure/name f] args]]
+(defn closure-signature (f)
+      (def args "")
+      (def arg-i 0)
+      (def arguments (closure/arguments f))
+      (while arguments
+        (if (pair? arguments)
+            (when (car arguments) (set! args (fmt "{args} <span class=\"argument\" arg-i=\"{}\">{}</span>" (inc! arg-i) (car arguments))))
+            (set! args (fmt "{args} <span class=\"argument rest-argument\" arg-i=\"{}\">{}</span>" (inc! arg-i) arguments)))
+        (cdr! arguments))
+      (fmt "<div class=\"signature\"><h1>{}</h1>{}</div>" (closure/name f) args))
 
-[defn closure-html-arg [f arg]
-      [def i [index-of arg ":"]]
-      [when [< i 0] [return arg]]
-      [return [fmt "<div class=\"docstring-arg-name\">{}</div><div class=\"docstring-arg-desc\">{}</div>" [string/cut arg 0 i] [color-args f [string/cut arg [inc i]]]]]]
+(defn closure-html-arg (f arg)
+      (def i (index-of arg ":"))
+      (when (< i 0) (return arg))
+      (return (fmt "<div class=\"docstring-arg-name\">{}</div><div class=\"docstring-arg-desc\">{}</div>" (string/cut arg 0 i) (color-args f (string/cut arg (inc i))))))
 
-[defn closure-html-arguments [f args]
-      [def i 0]
-      [fmt "<div class=\"docstring-args-wrap\">{}</div>"
-           [join [map [split args "\n"]
-                      [fn [arg]
-                          [fmt "<div class=\"docstring-arg\" arg-i=\"{}\">{}</div>" [inc! i] [closure-html-arg f arg]]]] ""]]]
+(defn closure-html-arguments (f args)
+      (def i 0)
+      (fmt "<div class=\"docstring-args-wrap\">{}</div>"
+           (join (map (split args "\n")
+                      (fn (arg)
+                          (fmt "<div class=\"docstring-arg\" arg-i=\"{}\">{}</div>" (inc! i) (closure-html-arg f arg)))) "")))
 
-[defn closure-html-return-val [f v]
-      [fmt "<div class=\"docstring-return-val\">{}</div>" [color-args f v]]]
+(defn closure-html-return-val (f v)
+      (fmt "<div class=\"docstring-return-val\">{}</div>" (color-args f v)))
 
-[defn color-args [f text]
-      [def i 0]
-      [def args [closure/arguments f]]
-      [while args
-             [inc! i]
-             [if [pair? args]
-                 [def arg [car args]]
-                 [def arg args]]
-             [set! text [join [split text [string arg]] [fmt "<span class=\"arg-ref\" arg-i=\"{}\">{arg}</span>" i]]]
-             [cdr! args]]
-      [return text]]
+(defn color-args (f text)
+      (def i 0)
+      (def args (closure/arguments f))
+      (while args
+             (inc! i)
+             (if (pair? args)
+                 (def arg (car args))
+                 (def arg args))
+             (set! text (join (split text (string arg)) (fmt "<span class=\"arg-ref\" arg-i=\"{}\">{arg}</span>" i)))
+             (cdr! args))
+      (return text))
 
-[defn closure-html-documentation [f]
-      [def raw [closure/documentation f]]
-      [when-not raw [return "<p>No documentation available</p>"]]
-      [def parts [split raw "\n\n"]]
-      [def ret [fmt "<h4>Summary</h4><p class=\"docstring-intro\">{}</p>" [color-args f [car parts]]]]
-      [cdr! parts]
-      [def len [length parts]]
-      [when [> len 2]
-        [set! ret [fmt "{ret}<h4>Description</h4>"]]]
-      [while [> len 2]
-        [set! ret [fmt "{ret}<p class=\"docstring-desc\">{}</p>" [color-args f [car parts]]]]
-        [cdr! parts]
-        [dec! len]]
-      [when [>= len 2]
-        [set! ret [fmt "{ret}<h4>Arguments</h4>{}" [closure-html-arguments f [car parts]]]]
-        [cdr! parts]
-        [dec! len]]
-      [when [>= len 1]
-        [set! ret [fmt "{ret}<h4>Return value</h4>{}" [closure-html-return-val f [car parts]]]]
-        [cdr! parts]
-        [dec! len]]
-      [return ret]]
+(defn closure-html-documentation (f)
+      (def raw (closure/documentation f))
+      (when-not raw (return "<p>No documentation available</p>"))
+      (def parts (split raw "\n\n"))
+      (def ret (fmt "<h4>Summary</h4><p class=\"docstring-intro\">{}</p>" (color-args f (car parts))))
+      (cdr! parts)
+      (def len (length parts))
+      (when (> len 2)
+        (set! ret (fmt "{ret}<h4>Description</h4>")))
+      (while (> len 2)
+        (set! ret (fmt "{ret}<p class=\"docstring-desc\">{}</p>" (color-args f (car parts))))
+        (cdr! parts)
+        (dec! len))
+      (when (>= len 2)
+        (set! ret (fmt "{ret}<h4>Arguments</h4>{}" (closure-html-arguments f (car parts))))
+        (cdr! parts)
+        (dec! len))
+      (when (>= len 1)
+        (set! ret (fmt "{ret}<h4>Return value</h4>{}" (closure-html-return-val f (car parts))))
+        (cdr! parts)
+        (dec! len))
+      (return ret))
 
-[defn closure-html-examples [f]
-      [def examples [meta f :tests]]
-      [when examples
-        [cat "<h4>Examples</h4><pre class=\"docstring-examples source source-nujel\">"
-             [-> examples
-                 [map [fn [e] [pp-nujel [fmt "{:?}\n{:?}\n" [cadr e] [car e]] :html]]]
-                 [join "\n"]]
-             "</pre>"]]]
+(defn closure-html-examples (f)
+      (def examples (meta f :tests))
+      (when examples
+        (cat "<h4>Examples</h4><pre class=\"docstring-examples source source-nujel\">"
+             (-> examples
+                 (map (fn (e) (pp-nujel (fmt "{:?}\n{:?}\n" (cadr e) (car e)) :html)))
+                 (join "\n"))
+             "</pre>")))
 
-[defn closure-html-related [f]
-      [def rel [meta f :related]]
-      [when rel
-        [cat "<h4>Related</h4><div class=\"docstring-related-wrap\">"
-             [-> rel
-                 [map [fn [e] [fmt "{} "  e]]]
-                 [join ""]]
-             "</div>"]]]
+(defn closure-html-related (f)
+      (def rel (meta f :related))
+      (when rel
+        (cat "<h4>Related</h4><div class=\"docstring-related-wrap\">"
+             (-> rel
+                 (map (fn (e) (fmt "{} "  e)))
+                 (join ""))
+             "</div>")))
 
-[defn closure-html-internal [f]
-      [when [meta f :internal]
-        "{{ [component :InternalWarning] }}"]]
+(defn closure-html-internal (f)
+      (when (meta f :internal)
+        "{{ (component :InternalWarning) }}"))
 
-[defn generate-reference-for [f]
-      [cat [closure-signature f]
+(defn generate-reference-for (f)
+      (cat (closure-signature f)
            "<br/><br/>"
-           [closure-html-internal f]
-           [closure-html-documentation f]
-           [closure-html-examples f]
-           [closure-html-related f]]]
+           (closure-html-internal f)
+           (closure-html-documentation f)
+           (closure-html-examples f)
+           (closure-html-related f)))
 
-[defn generate-content-for [f]
-      [def filename [fmt "{}.html" [closure/name f]]]
-      [when [= filename ".html"] [return #nil]]
-      [def tags #nil]
-      [when [meta f :internal] [cons! :internal tags]]
-      [queue-content filename
-                     @[:type :page :title [closure/name f] :category [closure/cat f] :tags tags]
-                     [fn [] [generate-reference-for f]]]]
+(defn generate-content-for (f)
+      (def filename (fmt "{}.html" (closure/name f)))
+      (when (= filename ".html") (return #nil))
+      (def tags #nil)
+      (when (meta f :internal) (cons! :internal tags))
+      (queue-content filename
+                     {:type :page :title (closure/name f) :category (closure/cat f) :tags tags}
+                     (fn () (generate-reference-for f))))
 
-[-> [symbol-table]
-    [map resolve-or-nil]
-    [filter callable?]
-    [for-each generate-content-for]]
+(-> (symbol-table)
+    (map resolve-or-nil)
+    (filter callable?)
+    (for-each generate-content-for))

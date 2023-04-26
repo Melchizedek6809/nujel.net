@@ -9,6 +9,5 @@ hide-prev-next: #t
 
 <p>Apart from the source itself, there is this "book" which might help if you are already experienced with another Lisp dialect.</p>
 <nav>
-    {{ [join [sort [map [navigation 1] [fn [v] [render-link v]]]] "<br/>"] }}
+    {{ (join (sort (map (navigation 1) (fn (v) (render-link v)))) "<br/>") }}
 </nav>
-

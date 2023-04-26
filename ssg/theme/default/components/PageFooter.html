@@ -1,18 +1,18 @@
 <div>
-    {{ [when [tree/ref [get-ctx] :author]
-             [cat "by " [tree/ref [get-ctx] :author]]] }}
+    {{ (when (tree/ref (get-ctx) :author)
+             (cat "by " (tree/ref (get-ctx) :author))) }}
 </div>
 <div>
-    {{ [and [tree/ref [get-meta] :date]
-            [cat "Published " [tree/ref [get-meta] :date]]]
+    {{ (and (tree/ref (get-meta) :date)
+            (cat "Published " (tree/ref (get-meta) :date)))
     }}
-    {{ [and [tree/ref [get-meta] :modified-date]
-            [cat "Last modified " [tree/ref [get-meta] :modified-date]]]
+    {{ (and (tree/ref (get-meta) :modified-date)
+            (cat "Last modified " (tree/ref (get-meta) :modified-date)))
     }}
 </div>
 <div>
-  {{ [or [tree/ref [get-ctx] :imprint] ""] }}
+  {{ (or (tree/ref (get-ctx) :imprint) "") }}
 </div>
 <div>
-  {{ [or [tree/ref [get-ctx] :contact] ""] }}
+  {{ (or (tree/ref (get-ctx) :contact) "") }}
 </div>

@@ -1,6 +1,7 @@
-@[ :title "Nujel.net"
-   :logo "img/logo.png"
-   :logo-text "Nujel"
-   :imprint "<br/>Benjamin Vincent Schulenburg - Wöhlerstr. 1A - 01139 Dresden - GERMANY"
-   :contact "If you want to contact me, you can send me an <a href=\"mailto:ben@wolkenwelten.net\">E-Mail</a>, or write me via Discord where I am available as <quote>Melchizedek6809#4065</quote>"
-   :favicon "favicon.png" ]
+{ :title "Nujel.net"
+  :logo "img/logo.png"
+  :logo-text "Nujel"
+  :imprint "<br/>Benjamin Vincent Schulenburg - Wöhlerstr. 1A - 01139 Dresden - GERMANY"
+  :contact "If you want to contact me, you can send me an <a href=\"mailto:ben@wolkenwelten.net\">E-Mail</a>, or write me via Discord where I am available as <quote>Melchizedek6809#4065</quote>"
+  :favicon "favicon.png"
+}

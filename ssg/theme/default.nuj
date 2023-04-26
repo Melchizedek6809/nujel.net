@@ -1,19 +1,19 @@
-[import [add-component add-template] "../theme"]
+(import (add-component add-template) "../theme")
 
-[def +theme-path+ [fmt "{}/default" *module-path*]]
+(def +theme-path+ (fmt "{}/default" *module-path*))
 
-[defn load-part [ctx suffix fun]
-      [doseq [comp-file [directory/read-recursive [fmt "{+theme-path+}/{suffix}"]] ctx]
-             [fun
+(defn load-part (ctx suffix fun)
+      (doseq (comp-file (directory/read-recursive (fmt "{+theme-path+}/{suffix}")) ctx)
+             (fun
               ctx
-              [-> comp-file
+              (-> comp-file
                   path/basename
                   path/without-extension
-                  string->keyword]
-              [slurp comp-file]
-              [cat [path/dirname comp-file] "/.."]]]]
+                  string->keyword)
+              (slurp comp-file)
+              (cat (path/dirname comp-file) "/.."))))
 
-[defn init [ctx]
+(defn init (ctx)
       :export
-      [load-part ctx "templates" add-template]
-      [load-part ctx "components" add-component]]
+      (load-part ctx "templates" add-template)
+      (load-part ctx "components" add-component))
