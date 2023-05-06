@@ -85,13 +85,21 @@
 
 (defn closure-html-bytecode (f)
       (try (fn (err)
-               (fmt "<box-wrap box-color=red><h3>Error</h3><p>Couldn't disassemble {}</p></box-wrap>" (closure/name f)))
+               (fmt "<box-wrap box-color=red><h3>Error</h3><p>Couldn't disassemble {}</p><pre class=\"source source-nujel\">{}</pre></box-wrap>" (closure/name f) (string/write err)))
       (def T (type-of f))
       (when (or (= T :lambda) (= T :macro))
         (def disassembly (disassemble f))
         (when disassembly
-          (cat "<h4>Bytecode</h4><p>Probably only interesting to you if you want to understand more about the Nujel VM or care very much about performance.</p><pre class=\"docstring-bytecode source source-nujel\">"
-               (pp-nujel disassembly :html)
+          (def pretty-disassembly (-> disassembly
+                                      (map (fn (op)
+                                               (fmt "<tr><td>{}</td><td>{}</td></tr>"
+                                                    (string/write (car op))
+                                                    (pp-nujel (string/write (cdr op)) :html))))
+                                      (join "\n")))
+          (def pretty-disassembly (fmt "<table><thead><tr><th>Address</th><th>Operation</th></tr></thead><tbody>{}</tbody></table>"
+                                       pretty-disassembly))
+          (cat "<h4>Bytecode listing</h4><pre class=\"docstring-bytecode source source-nujel\">"
+               pretty-disassembly
                "</pre>")))))
 
 (defn generate-reference-for (f)
