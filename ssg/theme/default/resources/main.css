@@ -376,6 +376,15 @@ h6 a{
 	line-height:1.3rem;
 }
 
+.listing-address {
+	text-align: right;
+	color: #7f848e;
+}
+
+.listing-operation {
+	width: 100%;
+}
+
 .nujel-hl-0 {color:#2d3139;}
 .nujel-hl-1 {color:#e06c75;}
 .nujel-hl-2 {color:#98c379;}
@@ -395,14 +404,14 @@ h6 a{
 
 .signature {
 	display: inline-block;
-	font-size: 1.4rem;
+	font-size: 1.8rem;
 }
 .signature::before {
-	content:"[";
+	content:"(";
 	color:#d7dae0;
 }
 .signature::after {
-	content:"]";
+	content:")";
 	color:#d7dae0;
 }
 
@@ -419,7 +428,6 @@ h6 a{
 	display:inline;
 	padding:0;
 	margin:0;
-	font-size:1.4rem;
 }
 .signature > .argument.rest-argument::before {
 	content:' . ';

@@ -64,9 +64,9 @@
 (defn closure-html-examples (f)
       (def examples (meta f :tests))
       (when examples
-        (cat "<h4>Examples</h4><pre class=\"docstring-examples source source-nujel\">"
+        (cat "<h4>Examples</h4><p><i>These are actually unit tests that are run in CI for every commit for every supported platform.</i></p><pre class=\"docstring-examples source source-nujel\">"
              (-> examples
-                 (map (fn (e) (pp-nujel (fmt "{:?}\n{:?}\n" (cadr e) (car e)) :html)))
+                 (map (fn (e) (pp-nujel (fmt "{:?}\n;=> {:?}\n" (cadr e) (car e)) :html)))
                  (join "\n"))
              "</pre>")))
 
@@ -92,7 +92,7 @@
         (when disassembly
           (def pretty-disassembly (-> disassembly
                                       (map (fn (op)
-                                               (fmt "<tr><td>{}</td><td>{}</td></tr>"
+                                               (fmt "<tr><td class=\"listing-address\">{}</td><td class=\"listing-operation\">{}</td></tr>"
                                                     (string/write (car op))
                                                     (pp-nujel (string/write (cdr op)) :html))))
                                       (join "\n")))
@@ -108,6 +108,8 @@
            (closure-html-internal f)
            (closure-html-documentation f)
            (closure-html-examples f)
+           "<h3>Implementation details</h3>"
+           "<p>For those interested in the inner workings of the Nujel VM</p>"
            (closure-html-bytecode f)
            (closure-html-related f)))
 
