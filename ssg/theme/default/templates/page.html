@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ (include-resource "resources/main.css") }}"/>
     {{ (component :Favicon) }}
   </head>
-  <body page-type="{{ (keyword->string (or (tree/ref props :type) :page)) }}">
+  <body page-type="{{ (keyword->string (or (ref props :type) :page)) }}">
     <header>
       {{ (component :Header) }}
     </header>

@@ -2,8 +2,8 @@
 
 (defn get-out-path (ctx path)
       :export
-      (cat (tree/ref ctx :deploy-dir)
-           (string/cut path (length (tree/ref ctx :content-root-dir)))))
+      (cat (ref ctx :deploy-dir)
+           (string/cut path (length (ref ctx :content-root-dir)))))
 
 (defn mkdir-safe (full-path)
       :export
@@ -23,7 +23,7 @@
       (mkdir-safe (path/dirname dest-path))
       (def page-parts (split-frontmatter (slurp path)))
       (def meta (get-frontmatter path
-                                 (string/cut path (inc (length (tree/ref ctx :content-root-dir))))
+                                 (string/cut path (inc (length (ref ctx :content-root-dir))))
                                  (car page-parts)))
       (spit dest-path (render ctx path meta (cdr page-parts)))
       (return dest-path))

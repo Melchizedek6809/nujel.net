@@ -15,20 +15,20 @@
       (return ctx))
 
 (defn include-resource* (ctx path dest-path)
-      (tree/set! (tree/ref ctx :resources-needed) (string->keyword path) (cons path dest-path))
+      (tree/set! (ref ctx :resources-needed) (string->keyword path) (cons path dest-path))
       (return dest-path))
 
 (defn load-components (ctx)
       :export
       (import (init :as theme/init)
-              (tree/ref themes (tree/ref ctx :theme)))
+              (ref themes (ref ctx :theme)))
       (theme/init ctx)
       ctx)
 
 (defn render (ctx path)
       :export
       "Apply a theme to a particular file in PATH"
-      (def theme (tree/ref themes (tree/ref ctx :theme)))
+      (def theme (ref themes (ref ctx :theme)))
       (import (render :as cur/render load-components) theme)
       (load-components ctx)
       (cur/render ctx path))
@@ -120,7 +120,7 @@
 (defn urlescape (in)
       (with-string-port out
                         (dotimes (i (buffer/length in))
-                          (def c (buffer/ref in i))
+                          (def c (ref in i))
                           (case c
                                 (#\# (out 'block-write "%23"))
                                 (#\& (out 'block-write "%26"))
@@ -128,26 +128,26 @@
                                 (otherwise (out 'char-write c))))))
 
 (defn get-href* (ctx path target)
-      (def name (string/cut path (inc (length (tree/ref ctx :content-root-dir)))))
+      (def name (string/cut path (inc (length (ref ctx :content-root-dir)))))
       (def depth (- (length (split name "/")) 1))
       (def href (if (tree? target)
-                    (tree/ref target :href)
+                    (ref target :href)
                     target))
       (dotimes (i depth (urlescape href))
         (set! href (cat "../" href))))
 
 (defn render-link* (ctx path target)
       (if (string? target)
-          (render-link* ctx path (tree/ref (tree/ref ctx :frontmatter) (string->keyword target)))
+          (render-link* ctx path (ref (ref ctx :frontmatter) (string->keyword target)))
           (fmt "<a href=\"{}\" class=\"{}\">{}</a>"
                (get-href* ctx path target)
                (do (def classes #nil)
-                   (def tags (and (tree? target) (tree/ref target :tags)))
+                   (def tags (and (tree? target) (ref target :tags)))
                    (doseq (tag tags) (cons! (cat "tag-" (keyword->string tag)) classes))
                    (join classes " "))
                (if (tree? target)
-                   (or (tree/ref target :nav-title)
-                       (tree/ref target :title))
+                   (or (ref target :nav-title)
+                       (ref target :title))
                    target))))
 
 (defn render-link (target)
@@ -161,8 +161,8 @@
 
 (defn get-posts ()
       (def ret #nil)
-      (doseq (p (tree/values (tree/ref (get-ctx) :frontmatter)) ret)
-             (when (== :post (tree/ref p :type))
+      (doseq (p (tree/values (ref (get-ctx) :frontmatter)) ret)
+             (when (== :post (ref p :type))
                (cons! p ret))))
 
 (defn include-resource (res-path)
@@ -178,29 +178,29 @@
           (ref (get-ctx) :title)))
 
 (defn this-href ()
-      (string/cut (get-path) (inc (length (tree/ref (get-ctx) :content-root-dir)))))
+      (string/cut (get-path) (inc (length (ref (get-ctx) :content-root-dir)))))
 
 (defn this-prev-next ()
-      (tree/ref (tree/ref (get-ctx) :prev-next-nav)
+      (ref (ref (get-ctx) :prev-next-nav)
                 (string->keyword (this-href))))
 
 (defn this-prev ()
       (and (this-prev-next)
-           (tree/ref (this-prev-next) :prev)))
+           (ref (this-prev-next) :prev)))
 
 (defn this-next ()
       (and (this-prev-next)
-           (tree/ref (this-prev-next) :next)))
+           (ref (this-prev-next) :next)))
 
 (defn component (name props children)
-      (def component-fun (tree/ref (tree/ref (get-ctx) :components) name))
+      (def component-fun (ref (ref (get-ctx) :components) name))
       (when-not component-fun (exception "Can't find a component called: " name))
       (try (fn (err)
              (efmtln "Error while rendering component {name}"))
            (component-fun props children)))
 
 (defn template (name props children)
-      (def template-fun (tree/ref (tree/ref (get-ctx) :templates) (or name :page)))
+      (def template-fun (ref (ref (get-ctx) :templates) (or name :page)))
       (when-not template-fun (exception "Can't find a template named: " name))
       (try (fn (err)
              (efmtln "Error while rendering theme {name}"))
@@ -208,13 +208,13 @@
 
 (defn add-component (ctx name raw-text component-path)
       :export
-      (tree/set! (tree/ref ctx :components)
+      (tree/set! (ref ctx :components)
                  name
                  (parse-component raw-text component-path)))
 
 (defn add-template (ctx name raw-text component-path)
       :export
-      (tree/set! (tree/ref ctx :templates)
+      (tree/set! (ref ctx :templates)
                  name
                  (parse-component raw-text component-path)))
 
@@ -236,6 +236,6 @@
                (efmtln "Error while rendering {path}")
              (efmtln "{err:?}"))
            (def content (parse-content ctx path raw-content meta))
-           (set! ret (template (tree/ref (get-meta) :type) meta content)))
+           (set! ret (template (ref (get-meta) :type) meta content)))
       (reset-page-ctx!)
       (return ret))

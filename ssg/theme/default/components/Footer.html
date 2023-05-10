@@ -1,5 +1,5 @@
 {{
-  (case (tree/ref (get-meta) :type)
+  (case (ref (get-meta) :type)
         (:page (component :PageFooter))
         (otherwise ""))
 }}

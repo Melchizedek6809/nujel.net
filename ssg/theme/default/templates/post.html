@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="{{ (include-resource "resources/main.css") }}"/>
     {{ (component :Favicon) }}
   </head>
-  <body page-type="{{ (keyword->string (or (tree/ref props :type) :post)) }}">
+  <body page-type="{{ (keyword->string (or (ref props :type) :post)) }}">
     <header>
       {{ (component :Header) }}
     </header>
     <main>
-      <h4 class="post-date">{{ (tree/ref props :date) }}</h4>
-      {{ (when (tree/ref props :author)
-               (cat "<h4 class=\"byline\">by " (tree/ref props :author) "</h4>")) }}
-      <h1>{{ (tree/ref props :title) }}</h1>
+      <h4 class="post-date">{{ (ref props :date) }}</h4>
+      {{ (when (ref props :author)
+               (cat "<h4 class=\"byline\">by " (ref props :author) "</h4>")) }}
+      <h1>{{ (ref props :title) }}</h1>
       {{ children }}
     </main>
     <footer>
