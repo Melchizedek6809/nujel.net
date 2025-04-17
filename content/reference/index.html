@@ -19,12 +19,12 @@ date: "2022-09-13"
 <div class="category-list">
 {{
     (def cats {})
-    (-> (symbol-table)
-        (map resolve-or-nil)
-        (for-each (fn (a) (tree/set! cats (closure/cat a) #t))))
-    (-> (tree/keys cats)
-        (sort (fn (a b) (< (string a) (string b))))
+    (-> (:keys (symbol-table))
+        (map (fn (sym) (and (resolves? sym) sym)))
+        (for-each (fn (a) (set! cats (closure/cat a) #t))))
+    (-> (:keys cats)
+        (sort (fn (a b) (< (:string a) (:string b))))
         (map (fn (a) (component :CategoryNavigation {:category a})))
         (join ""))
-                            }}
+}}
 </div>

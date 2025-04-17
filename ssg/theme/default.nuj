@@ -9,7 +9,7 @@
               (-> comp-file
                   path/basename
                   path/without-extension
-                  string->keyword)
+                  :keyword)
               (slurp comp-file)
               (cat (path/dirname comp-file) "/.."))))
 

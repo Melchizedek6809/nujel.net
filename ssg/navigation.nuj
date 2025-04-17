@@ -3,35 +3,35 @@
       "not be displayed on every page but will be calculated nonetheless"
       :export
       (def nav {})
-      (def l (-> (tree/values (ref ctx :frontmatter))
+      (def l (-> (:values (ref ctx :frontmatter))
                  (list/sort (fn (a b) (< (ref a :href)
                                          (ref b :href))))))
       (def c l)
       (while (cdr c)
-        (when (== (path/dirname (ref (car c) :href))
+        (when (= (path/dirname (ref (car c) :href))
                   (path/dirname (ref (cadr c) :href)))
-          (def cur-href (string->keyword (ref (cadr c) :href)))
+          (def cur-href (:keyword (ref (cadr c) :href)))
           (def prev-href (ref (car c) :href))
-          (when-not (ref nav cur-href) (tree/set! nav cur-href {:prev #nil :next #nil}))
-          (tree/set! (ref nav cur-href) :prev prev-href)
+          (when-not (ref nav cur-href) (set! nav cur-href {:prev #nil :next #nil}))
+          (set! (ref nav cur-href) :prev prev-href)
 
-          (def cur-href (string->keyword (ref (car c) :href)))
+          (def cur-href (:keyword (ref (car c) :href)))
           (def next-href (ref (cadr c) :href))
-          (when-not (ref nav cur-href) (tree/set! nav cur-href {:prev #nil :next #nil}))
-          (tree/set! (ref nav cur-href) :next next-href))
+          (when-not (ref nav cur-href) (set! nav cur-href {:prev #nil :next #nil}))
+          (set! (ref nav cur-href) :next next-href))
         (cdr! c))
-      (tree/set! ctx :prev-next-nav nav))
+      (set! ctx :prev-next-nav nav))
 
 (defn build (ctx depth prefix category)
       "Build up a navigation and return a list of trees, describing the entries"
       :export
-      (def l (-> (tree/values (ref ctx :frontmatter))
+      (def l (-> (:values (ref ctx :frontmatter))
                  (filter (fn (a) (not (ref a :hide-in-nav))))))
       (when depth
-        (set! l (filter l (fn (a) (== depth (ref a :depth))))))
+        (set! l (filter l (fn (a) (= depth (ref a :depth))))))
       (when prefix
-        (set! l (filter l (fn (a) (== prefix (cut (ref a :href) 0 (buffer/length prefix)))))))
+        (set! l (filter l (fn (a) (= prefix (cut (ref a :href) 0 (:length prefix)))))))
       (when category
-        (set! l (filter l (fn (a) (== category (ref a :category))))))
+        (set! l (filter l (fn (a) (= category (ref a :category))))))
       (list/sort l (fn (a b) (< (ref a :href)
                                 (ref b :href)))))

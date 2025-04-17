@@ -3,7 +3,7 @@
 (defn get-out-path (ctx path)
       :export
       (cat (ref ctx :deploy-dir)
-           (string/cut path (length (ref ctx :content-root-dir)))))
+           (:cut path (:length (ref ctx :content-root-dir)))))
 
 (defn mkdir-safe (full-path)
       :export
@@ -23,7 +23,7 @@
       (mkdir-safe (path/dirname dest-path))
       (def page-parts (split-frontmatter (slurp path)))
       (def meta (get-frontmatter path
-                                 (string/cut path (inc (length (ref ctx :content-root-dir))))
+                                 (:cut path (inc (:length (ref ctx :content-root-dir))))
                                  (car page-parts)))
       (spit dest-path (render ctx path meta (cdr page-parts)))
       (return dest-path))
@@ -38,7 +38,7 @@
 (defn build (ctx path)
       "Build a certain path using the loader"
       :export
-      (def ext (string->keyword (lower-case (path/extension path))))
-      (if (== ext :html)
+      (def ext (:keyword (lower-case (path/extension path))))
+      (if (= ext :html)
           (build-html ctx path)
           (build-copy ctx path)))

@@ -7,7 +7,7 @@
       (pp-nujel source :html))
 
 (defn add-theme (name mod)
-      (tree/set! themes name (module/load mod (current-closure))))
+      (set! themes name (module/load mod (current-closure))))
 
 (defn load-builtin-themes (ctx)
       :export
@@ -15,7 +15,7 @@
       (return ctx))
 
 (defn include-resource* (ctx path dest-path)
-      (tree/set! (ref ctx :resources-needed) (string->keyword path) (cons path dest-path))
+      (set! (ref ctx :resources-needed) (:keyword path) (cons path dest-path))
       (return dest-path))
 
 (defn load-components (ctx)
@@ -34,15 +34,15 @@
       (cur/render ctx path))
 
 (defn theme/split/rec (theme-text start ret)
-      (def i (index-of theme-text "{{" start))
+      (def i (:index-of theme-text "{{" start))
       (if (< i 0)
           (if (not= start 0)
-              (cons (string/cut theme-text start) ret)
+              (cons (:cut theme-text start) ret)
               (cons theme-text ret))
-          (do (def end-i (index-of theme-text "}}" i))
+          (do (def end-i (:index-of theme-text "}}" i))
               (when (< end-i 0) (exception "Unpaired Brackets in theme" theme-text))
-              (cons! (string/cut theme-text start i) ret)
-              (cons! (cons 'do (read (string/cut theme-text (+ i 2) end-i))) ret)
+              (cons! (:cut theme-text start i) ret)
+              (cons! (cons 'do (read (:cut theme-text (+ i 2) end-i))) ret)
               (theme/split/rec theme-text (+ end-i 2) ret))))
 
 (defn theme/split (theme-text)
@@ -53,14 +53,14 @@
       "Return a dotted pair of the frontmatter and content part from a raw piece of content"
       :export
       (def in (trim raw))
-      (def start (index-of in "+++"))
+      (def start (:index-of in "+++"))
       (when (not= start 0)
         (return (cons "" in)))
-      (def end (index-of in "+++" 3))
+      (def end (:index-of in "+++" 3))
       (when (< end 0)
         (return (cons "" in)))
-      (cons (trim (string/cut in 3 end))
-            (trim (string/cut in (+ 3 end)))))
+      (cons (trim (:cut in 3 end))
+            (trim (:cut in (+ 3 end)))))
 
 (defn frontmatter (text)
       "Return the frontmatter, if found, from some content"
@@ -75,16 +75,17 @@
 (defn get-frontmatter (path name raw-fm)
       :export
       (def fm (parse-frontmatter raw-fm))
-      (when-not (tree/has? fm :type) (tree/set! fm :type :page))
-      (tree/set! fm :href name)
-      (tree/set! fm :depth (- (length (split name "/")) 1))
+      (when-not (:has? fm :type) (set! fm :type :page))
+      (set! fm :href name)
+      (set! fm :depth (- (:length (split name "/")) 1))
       (return fm))
 
 (defn parse-content (ctx path raw-content *page-meta*)
       "Parses content, evaluating all embedded Nujel forms"
       :export
       (try (fn (err)
-             (efmtln "Error while rendering {path}"))
+             (efmtln "Error while rendering {path}")
+             (print/error err))
            (eval (cons 'cat (theme/split raw-content)))))
 
 (defn parse-frontmatter (fm)
@@ -119,17 +120,17 @@
 
 (defn urlescape (in)
       (with-string-port out
-                        (dotimes (i (buffer/length in))
+                        (dotimes (i (:length in))
                           (def c (ref in i))
                           (case c
-                                (#\# (out 'block-write "%23"))
-                                (#\& (out 'block-write "%26"))
-                                (#\? (out 'block-write "%3F"))
-                                (otherwise (out 'char-write c))))))
+                                (#\# (:block-write out "%23"))
+                                (#\& (:block-write out "%26"))
+                                (#\? (:block-write out "%3F"))
+                                (otherwise (:char-write out c))))))
 
 (defn get-href* (ctx path target)
-      (def name (string/cut path (inc (length (ref ctx :content-root-dir)))))
-      (def depth (- (length (split name "/")) 1))
+      (def name (:cut path (inc (:length (ref ctx :content-root-dir)))))
+      (def depth (- (:length (split name "/")) 1))
       (def href (if (tree? target)
                     (ref target :href)
                     target))
@@ -138,12 +139,12 @@
 
 (defn render-link* (ctx path target)
       (if (string? target)
-          (render-link* ctx path (ref (ref ctx :frontmatter) (string->keyword target)))
+          (render-link* ctx path (ref (ref ctx :frontmatter) (:keyword target)))
           (fmt "<a href=\"{}\" class=\"{}\">{}</a>"
                (get-href* ctx path target)
                (do (def classes #nil)
                    (def tags (and (tree? target) (ref target :tags)))
-                   (doseq (tag tags) (cons! (cat "tag-" (keyword->string tag)) classes))
+                   (doseq (tag tags) (cons! (cat "tag-" (:string tag)) classes))
                    (join classes " "))
                (if (tree? target)
                    (or (ref target :nav-title)
@@ -161,8 +162,8 @@
 
 (defn get-posts ()
       (def ret #nil)
-      (doseq (p (tree/values (ref (get-ctx) :frontmatter)) ret)
-             (when (== :post (ref p :type))
+      (doseq (p (:values (ref (get-ctx) :frontmatter)) ret)
+             (when (= :post (ref p :type))
                (cons! p ret))))
 
 (defn include-resource (res-path)
@@ -178,11 +179,11 @@
           (ref (get-ctx) :title)))
 
 (defn this-href ()
-      (string/cut (get-path) (inc (length (ref (get-ctx) :content-root-dir)))))
+      (:cut (get-path) (inc (:length (ref (get-ctx) :content-root-dir)))))
 
 (defn this-prev-next ()
       (ref (ref (get-ctx) :prev-next-nav)
-                (string->keyword (this-href))))
+                (:keyword (this-href))))
 
 (defn this-prev ()
       (and (this-prev-next)
@@ -196,25 +197,27 @@
       (def component-fun (ref (ref (get-ctx) :components) name))
       (when-not component-fun (exception "Can't find a component called: " name))
       (try (fn (err)
-             (efmtln "Error while rendering component {name}"))
+             (efmtln "Error while rendering component {name}")
+             (print/error err))
            (component-fun props children)))
 
 (defn template (name props children)
       (def template-fun (ref (ref (get-ctx) :templates) (or name :page)))
       (when-not template-fun (exception "Can't find a template named: " name))
       (try (fn (err)
-             (efmtln "Error while rendering theme {name}"))
+             (efmtln "Error while rendering theme {name}")
+             (print/error err))
            (template-fun props children)))
 
 (defn add-component (ctx name raw-text component-path)
       :export
-      (tree/set! (ref ctx :components)
+      (set! (ref ctx :components)
                  name
                  (parse-component raw-text component-path)))
 
 (defn add-template (ctx name raw-text component-path)
       :export
-      (tree/set! (ref ctx :templates)
+      (set! (ref ctx :templates)
                  name
                  (parse-component raw-text component-path)))
 
@@ -234,7 +237,7 @@
       (def ret "")
       (try (fn (err)
                (efmtln "Error while rendering {path}")
-             (efmtln "{err:?}"))
+               (print/error err))
            (def content (parse-content ctx path raw-content meta))
            (set! ret (template (ref (get-meta) :type) meta content)))
       (reset-page-ctx!)

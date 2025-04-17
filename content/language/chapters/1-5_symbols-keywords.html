@@ -23,7 +23,7 @@ asd
 (string->symbol \"asd\") ; You can also turn any old string into a symbol, this is sometimes called interning a string
 asd
 
-(== 'asd (string->symbol \"asd\")) ; The two values actually point to the same underlying data structure
+(= 'asd (string->symbol \"asd\")) ; The two values actually point to the same underlying data structure
 #t") }}
 
 <box-wrap box-color="yellow">

@@ -12,9 +12,9 @@
       (fmt "<div class=\"signature\"><h1>{}</h1>{}</div>" (closure/name f) args))
 
 (defn closure-html-arg (f arg)
-      (def i (index-of arg ":"))
+      (def i (:index-of arg ":"))
       (when (< i 0) (return arg))
-      (return (fmt "<div class=\"docstring-arg-name\">{}</div><div class=\"docstring-arg-desc\">{}</div>" (string/cut arg 0 i) (color-args f (string/cut arg (inc i))))))
+      (return (fmt "<div class=\"docstring-arg-name\">{}</div><div class=\"docstring-arg-desc\">{}</div>" (:cut arg 0 i) (color-args f (:cut arg (inc i))))))
 
 (defn closure-html-arguments (f args)
       (def i 0)
@@ -44,7 +44,7 @@
       (def parts (split raw "\n\n"))
       (def ret (fmt "<h4>Summary</h4><p class=\"docstring-intro\">{}</p>" (color-args f (car parts))))
       (cdr! parts)
-      (def len (length parts))
+      (def len (:length parts))
       (when (> len 2)
         (set! ret (fmt "{ret}<h4>Description</h4>")))
       (while (> len 2)
@@ -122,7 +122,7 @@
                      {:type :page :title (closure/name f) :category (closure/cat f) :tags tags}
                      (fn () (generate-reference-for f))))
 
-(-> (symbol-table)
-    (map resolve-or-nil)
+(-> (:keys (symbol-table))
+    (map (fn (sym) (and (resolves? sym) sym)))
     (filter callable?)
     (for-each generate-content-for))

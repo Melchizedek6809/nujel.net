@@ -5,7 +5,7 @@
       :export
       "Copy all resources used over"
       (def deploy-dir (ref ctx :deploy-dir))
-      (doseq (res (tree/values (ref ctx :resources-needed)) ctx)
+      (doseq (res (:values (ref ctx :resources-needed)) ctx)
              (mkdir (fmt "{deploy-dir}/{}" (path/dirname (cdr res))))
              (file/copy (car res) (fmt "{deploy-dir}/{}" (cdr res)))))
 
@@ -15,7 +15,7 @@
 (defn load-frontmatter (path name content-frontmatter)
       (when-not (path/content? path) (return #nil))
       (def fm (get-frontmatter path name (frontmatter (slurp path))))
-      (tree/set! content-frontmatter (string->keyword name) fm))
+      (set! content-frontmatter (:keyword name) fm))
 
 (defn build-content (ctx path content-frontmatter build-fun)
       (when (file/file? (cat path "/config.nuj"))
@@ -27,11 +27,11 @@
 
 (defn queue-content* (ctx base-path out-path fm content-fun)
       (def path (cat base-path out-path))
-      (def href (string/cut path (inc (length (ref ctx :content-root-dir)))))
-      (tree/set! fm :href href)
-      (tree/set! fm :depth (- (length (split (ref fm :href) "/")) 1))
-      (tree/set! (ref ctx :frontmatter) (string->keyword href) fm)
-      (tree/set! (ref ctx :generator-queue) (string->keyword href) {:path path :meta fm :fun content-fun}))
+      (def href (:cut path (inc (:length (ref ctx :content-root-dir)))))
+      (set! fm :href href)
+      (set! fm :depth (- (:length (split (ref fm :href) "/")) 1))
+      (set! (ref ctx :frontmatter) (:keyword href) fm)
+      (set! (ref ctx :generator-queue) (:keyword href) {:path path :meta fm :fun content-fun}))
 
 
 (defn generate-content (ctx)
@@ -41,7 +41,7 @@
                      (ref ctx :content-root-dir)
                      (ref ctx :frontmatter)
                      (fn (ctx path content-frontmatter)
-                         (when-not (== (path/basename path) "generator.nuj")
+                         (when-not (= (path/basename path) "generator.nuj")
                                    (return #nil))
                        (def base-path (cat (path/dirname path) "/"))
                        (defn queue-content (out-path fm content-fun)
@@ -59,9 +59,9 @@
                      content-frontmatter
                      (fn (ctx path content-frontmatter)
                          (load-frontmatter path
-                                           (string/cut path (inc (length (ref ctx :content-root-dir))))
+                                           (:cut path (inc (:length (ref ctx :content-root-dir))))
                                            content-frontmatter)))
-      (tree/set! ctx :frontmatter content-frontmatter))
+      (set! ctx :frontmatter content-frontmatter))
 
 (defn build-ctx (ctx)
       "Build everything"
@@ -74,7 +74,7 @@
 (defn build-queued (ctx)
       "Build queued generator content"
       :export
-      (doseq (d (tree/values (ref ctx :generator-queue)) ctx)
+      (doseq (d (:values (ref ctx :generator-queue)) ctx)
              (def raw-content ((ref d :fun)))
              (def path (get-out-path ctx (ref d :path)))
              (mkdir-safe (path/dirname path))
